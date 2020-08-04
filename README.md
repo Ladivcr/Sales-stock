@@ -1,7 +1,7 @@
 # Sales-stock
 Un proyecto para hacer un template de un punto de venta para algún negocio. 
 
-# Creditos en QT
+# Créditos en QT
 El template que estoy desarrollando lo estoy haciendo
 basandome en los vídeos de <strong> JAOR SOFTWARE </strong>
 <br>
