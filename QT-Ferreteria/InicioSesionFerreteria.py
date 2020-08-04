@@ -64,6 +64,9 @@ class Ui_Dialog(object):
         # Establece la función Enter
         self.leUsuario.returnPressed.connect(self.fnProcesaEnter)
 
+        # Establece la función para saber si se presionauna tecla
+        self.leUsuario.keyPressEvent = self.keyPressEvent
+
         # Establece la función para procesar el cambio de texto
         self.leUsuario.textChanged.connect(self.fnProcesarCambioTexto)
 
@@ -77,6 +80,9 @@ class Ui_Dialog(object):
         self.leContrasena.setObjectName("leContrasena")
         # Establece la función Enter
         self.leContrasena.returnPressed.connect(self.fnProcesaEnter)
+
+        # Establece el control de evento para cuando se presiona una Tecla
+        self.leContrasena.keyPressEvent = self.keyPressEvent
 
         # Establece la función para procesar el cambio de texto
         self.leContrasena.textChanged.connect(self.fnProcesarCambioTexto)
@@ -211,8 +217,24 @@ class Ui_Dialog(object):
             # El foco lo tiene Password
             print("Cambio de texto en Password:", self.leContrasena.text())
 
+    # Se ha presionado una tecla
+    def keyPressEvent(self, event):
+        # Mensaje
+        print("Tecla presionada:", event.text())
+        if (self.leUsuario.hasFocus()):
+            print("Presionaste una tecla en usuario")
 
+            # Evitamos el 5
+            if (event.text()!= "1"):
+                return (QtWidgets.QLineEdit.keyPressEvent(self.leUsuario, event))
+        elif (self.leContrasena.hasFocus()):
+            print("Presionaste una tecla en contrasena")
+            if (event.text()!="1"):
+                return (QtWidgets.QLineEdit.keyPressEvent(self.leContrasena, event))
 
+        else:
+            #Mensaje
+            print("Se presiono una tecla en el botón aceptar")
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
