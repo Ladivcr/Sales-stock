@@ -6,8 +6,50 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+#Librerias
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
+import mysql.connector
+import json
+
+# Cargamos las credenciales
+with open('credentialsDB.json') as file:
+    credentials = json.load(file)
+
+# Seleccionamos las credenciales
+userDB = credentials["credentials"][0]["user"]
+passwordDB = credentials["credentials"][0]["password"]
+hostDB = credentials["credentials"][0]["host"]
+nameDB = credentials["credentials"][0]["database"]
+
+#CREATE TABLE possible_trends(hashtag VARCHAR (280), quantity INT, publication_date DATE) CHARSET = utf-8;
+
+
+# Función para conectarse a mysql
+def fnConexionBD(objeto):
+    try:
+        print("Intentado acceso a...")
+        print("Servidor : localhost")
+        print("Usuario : root")
+        print("Password :", objeto.leContrasena.text())
+
+        # Creamos una conexión e intentamos conectarse
+        conMySql = mysql.connector.connect(host=hostDB,
+        user = userDB, passwd = passwordDB, database= nameDB)
+        print("La conexión fue exitosa")
+        conMySql.close()
+        print("Conexión cerrada")
+        return (True)
+
+    except mysql.connector.errors.InterfaceError:
+        # Despliega el mensaje de errors
+        fnMensaje("Error en conexión a MySql", "Verifica ejecución del conector a MySql y Servidor en Archivo de credenciales")
+        return (False)
+
+    except mysql.connector.errors.ProgrammingError:
+        # Despliega el mensaje de error por usuario y clave
+        fnMensaje("Error en usuario/clave", "Verifique Usuario y Clave en el archivo de credenciales")
+        return (False)
 
 # Definimos una función para desplegar
 # un meessage box
@@ -181,6 +223,8 @@ class Ui_Dialog(object):
         self.pbIniciar.setIcon(icon)
         self.pbIniciar.setIconSize(QtCore.QSize(24, 24))
         self.pbIniciar.setObjectName("pbIniciar")
+        self.pbIniciar.setAutoDefault(False)
+        self.pbIniciar.setDefault(False)
 
         # Asocia el keyPressEvent
         self.pbIniciar.keyPressEvent = self.keyPressEvent
@@ -202,6 +246,8 @@ class Ui_Dialog(object):
         self.pbCancelar.setIcon(icon1)
         self.pbCancelar.setIconSize(QtCore.QSize(24, 24))
         self.pbCancelar.setObjectName("pbCancelar")
+        self.pbCancelar.setAutoDefault(False)
+
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -211,28 +257,32 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "Inicio de sesión"))
         self.gtbSesion.setTitle(_translate("Dialog", " Usuario Y Contraseña"))
         self.lblUsuario.setText(_translate("Dialog", "Usuario:"))
+        self.leUsuario.setToolTip(_translate("Dialog", "Nombre de usuario registrado en la Base de Datos"))
         self.lblContrasena.setText(_translate("Dialog", "Contraseña:"))
+        self.leContrasena.setToolTip(_translate("Dialog", "Clave de acceso del usuario"))
         self.lblNombre.setText(_translate("Dialog", "Nombre:"))
         self.lblRol.setText(_translate("Dialog", "Rol:"))
         self.leNombre.setText(_translate("Dialog", "Unknow"))
         self.leRol.setText(_translate("Dialog", "Unknow"))
         self.pbIniciar.setText(_translate("Dialog", "Iniciar"))
+        self.pbIniciar.setToolTip(_translate("Dialog", "Presione para acceder al sistema"))
         self.pbCancelar.setText(_translate("Dialog", "Cancelar"))
+        self.pbCancelar.setToolTip(_translate("Dialog", "Salida del inicio de sesión"))
 
     """
     Función para procesar el Enter
     """
     def fnProcesaEnter(self):
-        print("Haz presionado enter")
+        #print("Haz presionado enter")
 
         #Verifica si tiene el foco del Usuario
         if (self.leUsuario.hasFocus()):
             # Manda el foco al Password
-            print("Foco en Password")
+            #print("Foco en Password")
             self.leContrasena.setFocus()
         else:
             # El foco lo tiene Password
-            print("Foco a Aceptar")
+            #print("Foco a Aceptar")
             # Manda el foco al boton de Aceptar
             self.pbIniciar.setFocus()
 
@@ -252,33 +302,34 @@ class Ui_Dialog(object):
     # Se ha presionado una tecla
     def keyPressEvent(self, event):
         # Mensaje
-        print("Tecla presionada:", event.text())
+        #print("Tecla presionada:", event.text())
+        # Verifica si tiene el foco el botón de aceptar
         if (self.leUsuario.hasFocus()):
-            print("Presionaste una tecla en usuario")
-
-            # Evitamos el 5
-            if (event.text()!= "1"):
-                return (QtWidgets.QLineEdit.keyPressEvent(self.leUsuario, event))
+            return (QtWidgets.QLineEdit.keyPressEvent(self.leUsuario, event))
 
         elif (self.leContrasena.hasFocus()):
-            print("Presionaste una tecla en contrasena")
-            if (event.text()!="1"):
-                return (QtWidgets.QLineEdit.keyPressEvent(self.leContrasena, event))
+            #print("Presionaste una tecla en contrasena")
+            return (QtWidgets.QLineEdit.keyPressEvent(self.leContrasena, event))
 
         else:
             #Mensaje
-            print("Se presiono una tecla en el botón aceptar")
-
+            #print("Se presiono una tecla en el botón aceptar")
+            """
+            Tengo problemas aquí al detectar si es Enter o no
+            """
             #Verifica que sea Enter
             if (event.key() == QtCore.Qt.key_Return):
                 # Llama la función para validar fnValidaDatos
-                self.fnValidaDatos()
+                if(self.fnValidaDatos()):
+                    # Intenta conexión a BD
+                    fnConexionBD(self)
 
     # Funcion para procesar el click del botón de aceptar
     def fnProcesaClickAceptar(self):
-        if(self.pbIniciar.hasFocus()):
-            # Llama a la función de validar fnValidaDatos
-            self.fnValidaDatos()
+        # Llama a la función de validar datos
+        if(self.fnValidaDatos()):
+            # Intenta la conexión a la bd
+            fnConexionBD(self)
 
     # Función para validar datos
     def fnValidaDatos(self):
