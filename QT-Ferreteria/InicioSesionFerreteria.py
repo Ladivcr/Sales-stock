@@ -7,6 +7,29 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
+
+# Definimos una función para desplegar
+# un meessage box
+def fnMensaje(sMensaje, sInformacion):
+    #Crea un message Box
+    msg = QMessageBox()
+
+    # Establece el icono
+    msg.setIcon(QMessageBox.Information)
+
+    # Coloca el mensaje a desplegar
+    msg.setText(sMensaje)
+    msg.setInformativeText(sInformacion)
+    msg.setWindowTitle("Mensaje informativo")
+    #msg.setDetailedText("The details are as follow:")
+    msg.setStandardButtons(QMessageBox.Ok)
+
+    # Ejecuta el MessageBox
+    msg.exec_()
+    return()
+
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -159,6 +182,15 @@ class Ui_Dialog(object):
         self.pbIniciar.setIconSize(QtCore.QSize(24, 24))
         self.pbIniciar.setObjectName("pbIniciar")
 
+        # Asocia el keyPressEvent
+        self.pbIniciar.keyPressEvent = self.keyPressEvent
+
+        # Controla el evento click
+        #self.pbIniciar.clicked.connect(self.fnValidaDatos)
+        self.pbIniciar.clicked.connect(self.fnProcesaClickAceptar)
+
+
+
 
         self.pbCancelar = QtWidgets.QPushButton(Dialog)
         self.pbCancelar.setGeometry(QtCore.QRect(10, 250, 131, 51))
@@ -227,6 +259,7 @@ class Ui_Dialog(object):
             # Evitamos el 5
             if (event.text()!= "1"):
                 return (QtWidgets.QLineEdit.keyPressEvent(self.leUsuario, event))
+
         elif (self.leContrasena.hasFocus()):
             print("Presionaste una tecla en contrasena")
             if (event.text()!="1"):
@@ -235,6 +268,60 @@ class Ui_Dialog(object):
         else:
             #Mensaje
             print("Se presiono una tecla en el botón aceptar")
+
+            #Verifica que sea Enter
+            if (event.key() == QtCore.Qt.key_Return):
+                # Llama la función para validar fnValidaDatos
+                self.fnValidaDatos()
+
+    # Funcion para procesar el click del botón de aceptar
+    def fnProcesaClickAceptar(self):
+        if(self.pbIniciar.hasFocus()):
+            # Llama a la función de validar fnValidaDatos
+            self.fnValidaDatos()
+
+    # Función para validar datos
+    def fnValidaDatos(self):
+
+        # Variable para el Mensaje
+        sMensaje = ""
+
+        # Valida el usuario
+        if (len(self.leUsuario.text())==0):
+            # Coloca el dato en el mensaje
+            sMensaje = "El usuario\n"
+
+            # Coloca el foco en el Usuario
+            self.leUsuario.setFocus()
+
+        # Valida el Password
+        if (len(self.leContrasena.text())==0):
+            # Verifica si debe colocar el foco
+            if (len(sMensaje)==0):
+                # Coloca el Foco
+                self.leContrasena.setFocus()
+
+            # Agrego el dato en el mensaje
+            sMensaje = sMensaje + "El Password"
+
+        # Verifica si debe desplegar el mensade de error
+        if (len(sMensaje)>0):
+            #Actualiza el Mensaje
+            sMensaje="Revise los siguientes datos:\n" + sMensaje
+            # Despliega el MessageBox
+            fnMensaje(sMensaje, "El usuario y la contraseña no pueden quedar vacios")
+            # Hay error en los datos
+            return (False)
+        else:
+            # Despliega el MessageBox
+            fnMensaje("Los datos están correctos", "La aplicación intentara el acceso")
+            # Los datos están correctos
+            return (True)
+
+
+
+
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

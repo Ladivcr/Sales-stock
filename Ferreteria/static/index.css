@@ -58,14 +58,14 @@ main {
   padding: 20px;
 }
 
-@media (max-width:768px) {
+@media (max-width:168px) {
   header label {
     display: block;
   }
 
   .menu {
     position: absolute;
-    background: #4E94AB
+    background: #4E94AB;
     width: 70%;
     margin-left: -70%;
     transition: all 0.4s;
