@@ -32,6 +32,8 @@ app = Flask(__name__)
 # Definimos la función para la ruta de la página principal
 def index():
     return (render_template("index.html"))
+
+
 ########################################################################
 """
 Apartado: REALIZAR VENTAS
@@ -54,7 +56,21 @@ Apartado: INVENTARIO
 """
 @app.route("/Inventario")
 def Inventario():
-    return (render_template("Inventario.html"))
+    import functions
+    mydata = functions.desplegar_lista_inventario()
+
+    return (render_template("Inventario.html", productos = mydata))
+
+
+@app.route("/Inventario/Actualizar-Inventario")
+def InventarioActualizar():
+    return (render_template("InventarioActualizar.html"))
+
+#----FUNCIONES PARA *DESPLEGAR* LA LISTA DE ARTICULOS EN EL INVENTARIO------------
+@app.route("/Inventario/filterInventario", methods = ['POST'])
+def filterInventario():
+	mydata = Processing.displayGroup(cnx)
+	return render_template("groups.html", dataSet = mydata)
 
 
 ########################################################################
