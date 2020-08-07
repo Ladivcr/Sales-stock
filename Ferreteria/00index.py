@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 """
 Title-Project: Ferreteria
+Code: Principal
 @uthor: José Vidal Cardona Rosas
 About: Work in back-end for the control of web page
 """
@@ -9,7 +10,6 @@ About: Work in back-end for the control of web page
 from flask import Flask, render_template, request
 import json
 import webbrowser
-from flask_sqlalchemy import SQLAlchemy
 import mysql.connector
 from mysql.connector import errorcode
 # Cargamos las credenciales
