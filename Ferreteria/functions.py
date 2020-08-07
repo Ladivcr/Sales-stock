@@ -56,10 +56,10 @@ def desplegar_lista_inventario():
         cursor = cnx.cursor()
         query = ('SELECT * FROM inventario;')
         cursor.execute(query)
-        cnx.commit()
+
 
     except:
-        print("<h1> Algo a fallado al realizar la consulta a Inventario. Por favor contacte al administrador</h1>")
+        return("<h1> Algo a fallado al realizar la consulta a Inventario. Por favor contacte al administrador</h1>")
 
     mydata = []
     #datos = cursor.fetchall()
@@ -67,5 +67,6 @@ def desplegar_lista_inventario():
         #mydata2[hashtag]=[quantity, str(date)]
         mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
 
+    cnx.commit()
     cnx.close()
     return(mydata)

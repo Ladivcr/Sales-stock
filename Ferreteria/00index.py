@@ -57,8 +57,8 @@ Apartado: INVENTARIO
 @app.route("/Inventario")
 def Inventario():
     import functions
+    # Función para desplegar la lista de invetnario
     mydata = functions.desplegar_lista_inventario()
-
     return (render_template("Inventario.html", productos = mydata))
 
 
