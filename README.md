@@ -1,5 +1,7 @@
 # Sales-stock
 Un proyecto para hacer un template de un punto de venta para algún negocio. 
+>* Para el template web: En la carpeta de Ferreteria
+> * Para el template de escritorio: En la carpeta QT-Ferreteria
 
 # Créditos en QT
 El template que estoy desarrollando lo estoy haciendo
