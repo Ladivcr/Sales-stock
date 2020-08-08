@@ -8,19 +8,9 @@ About: Work in back-end for the control of web page
 """
 # Importamos la librería
 from flask import Flask, render_template, request
-import json
 import webbrowser
 import mysql.connector
 from mysql.connector import errorcode
-# Cargamos las credenciales
-with open('credentialsDB.json') as file:
-    credentials = json.load(file)
-
-# Seleccionamos las credenciales
-userDB = credentials["credentials"][0]["user"]
-passwordDB = credentials["credentials"][0]["password"]
-hostDB = credentials["credentials"][0]["host"]
-nameDB = credentials["credentials"][0]["database"]
 
 # Creamos el objeto de flask que nos servira para lanzar el servidor
 # y la página web
@@ -56,7 +46,7 @@ Apartado: INVENTARIO
 @app.route("/Inventario")
 def Inventario():
     import functions
-    # Función para desplegar la lista de invetnario
+    # Función para desplegar la lista de inventario
     mydata = functions.desplegar_lista_inventario()
     return (render_template("Inventario.html", productos = mydata))
 
@@ -65,13 +55,19 @@ def Inventario():
 def InventarioActualizar():
     return (render_template("InventarioActualizar.html"))
 
-#----FUNCIONES PARA *DESPLEGAR* LA LISTA DE ARTICULOS EN EL INVENTARIO------------
-@app.route("/Inventario/filterInventario", methods = ['POST'])
-def filterInventario():
-	mydata = Processing.displayGroup(cnx)
-	return render_template("groups.html", dataSet = mydata)
-
-
+#---FUNCION PARA *FILTRAR* LA LISTA DE ARTICULOS EN EL INVENTARIO------
+@app.route("/Inventario/FilterInventario", methods = ['POST'])
+def FilterInventario():
+    import functions
+    letter = request.form['valuesLetter']
+    letter = letter.lower()
+    #print(letter)
+    mydata = functions.desplegar_lista_inventario_letra(letter)
+    print(mydata)
+    if mydata == False:
+        return("<h1> No fue posible filtrar, contacte al administrador</h1>")
+    else:
+        return (render_template("Inventario.html", productos = mydata))
 ########################################################################
 """
 Apartado: Contacto
