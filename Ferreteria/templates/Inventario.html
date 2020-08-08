@@ -9,7 +9,7 @@
 {% block content %}
 
 
-  <form  class = "menuINVENTARIO" action="/Inventario/filterInventario" method="post">
+  <form  class = "menuINVENTARIO" action="/Inventario/DisplayInventario" method="post">
     <ul id="horizontal">
     <li><a><input type = "text" name="filter" class="" type="search"  placeholder="Introduce el nombre del producto" ></a></li>
     <li><a><button class="" type="submit">Buscar producto</button></a></li>
@@ -42,8 +42,8 @@
       </table>
     </div>
 
-    <form action="/Inventario/filterInventario" method="post">
-      <select name="values" class="list">
+    <form action="/Inventario/FilterInventario" method="post">
+      <select name="valuesLetter" class="list">
         <option value="A">A</option>
         <option value="B">B</option>
         <option value="C">C</option>
@@ -72,7 +72,7 @@
         <option value="Y">Y</option>
         <option value="Z">Z</option>
       </select>
-    <button type="submit" name="submit_button" value="Mostrar">Seleccionar letra para filtrado</button>
+    <button type="submit" name="submit_button" value="Mostrar">Filtrar</button>
     </form>
 
 {% endblock %}
