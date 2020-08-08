@@ -25,7 +25,7 @@ userDB = credentials["credentials"][0]["user"]
 passwordDB = credentials["credentials"][0]["password"]
 hostDB = credentials["credentials"][0]["host"]
 nameDB = credentials["credentials"][0]["database"]
-print(userDB, passwordDB, hostDB, nameDB)
+
 
 def añadir_al_inventario(IDProducto, NombreProducto, Especificaciones, CantidadProducto, Precio):
     try:
@@ -56,8 +56,6 @@ def desplegar_lista_inventario():
         cursor = cnx.cursor()
         query = ('SELECT * FROM inventario;')
         cursor.execute(query)
-
-
     except:
         return("<h1> Algo a fallado al realizar la consulta a Inventario. Por favor contacte al administrador</h1>")
 

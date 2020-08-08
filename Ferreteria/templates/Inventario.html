@@ -1,39 +1,47 @@
 {% extends "formatoPrincipal.html" %}
 
 {% block content2 %}
+<link rel="stylesheet" href="{{url_for('static',filename='CSSinventario.css')}}">
+
 <title>Inventario</title>
 {% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand"><h2>Inventario</h2></a>
-  <form class="form-inline" action="/Inventario/filterInventario" method="post">
-    <input type = "text" name="filter" class="form-control mr-sm-2" type="search"  placeholder="Introduce el nombre del producto" >
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-    <a class="nav-item nav-link active" href="{{url_for('InventarioActualizar')}}">Acualizar Inventario</a>
+
+
+  <form  class = "menuINVENTARIO" action="/Inventario/filterInventario" method="post">
+    <ul id="horizontal">
+    <li><a><input type = "text" name="filter" class="" type="search"  placeholder="Introduce el nombre del producto" ></a></li>
+    <li><a><button class="" type="submit">Buscar producto</button></a></li>
+    <li><a href="{{url_for('InventarioActualizar')}}"><b>Acualizar Inventario</b></a></li>
+    </ul>
   </form>
 
-  <table class="table" >
-    <thead class="thead-dark">
+
+<div id = "main-container">
+  <table>
+    <thead>
       <tr>
-        <th scope="col">|Codigo|</th>
-        <th scope="col">|Nombre|</th>
-        <th scope="col">|Especificaciones|</th>
-        <th scope="col">|En existencia|</th>
-        <th scope="col">|Precio c/u|</th>
+        <th scope="col">Codigo</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Especificaciones</th>
+        <th scope="col">En existencia</th>
+        <th scope="col">Precio c/u</th>
       </tr>
     </thead>
     <tbody>
       {% for value in productos %}
       <tr>
-        <th>|{{ value[0] }}|</th>
-        <td>|{{ value[1] }}|</td>
-        <td>|{{ value[2] }}|</td>
-        <td>|{{ value[3] }}|</td>
-        <td>|{{ value[4] }}|</td>
+        <td>{{ value[0] }}</td>
+        <td>{{ value[1] }}</td>
+        <td>{{ value[2] }}</td>
+        <td>{{ value[3] }}</td>
+        <td>{{ value[4] }}</td>
       </tr>
       {% endfor %}
       </table>
+    </div>
+
     <form action="/Inventario/filterInventario" method="post">
       <select name="values" class="list">
         <option value="A">A</option>
