@@ -122,9 +122,6 @@ def buscar_articulo_nombre(word):
         cursor = cnx.cursor()
         query = ("SELECT * FROM inventario WHERE Nombre_Producto = %s;")
         cursor.execute(query,(word,))
-        # IMPLEMENTAR LA BÚSQUEDA POR COINCIDENCIA. O SEA POR UNA LETRA
-        # PARA ESO BASTA CON MEDIR LA LONGITUD DE LA PALABRA Y SI SOLO
-        # ES UNA LETRA, EFECTUAR UNA QUERY CON LIKE
         #datos = cursor.fetchone()
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
