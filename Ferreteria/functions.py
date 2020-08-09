@@ -103,11 +103,18 @@ FUNCION: BUSCAR POR NOMBRE
 """
 def buscar_articulo_palabra(word):
     try:
+        print("El word.", word)
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        print("El word.", word)
         cursor = cnx.cursor()
-        query('SELECT * FROM inventario WHERE Nombre_Producto = %s;')
+        print("El word.", word)
+        query = ("SELECT * FROM inventario WHERE Nombre_Producto = %s;")
+        print("El word.", word)
         cursor.execute(query,(word,))
-        datos = cursor.fetchone()
+        # IMPLEMENTAR LA BÚSQUEDA POR COINCIDENCIA. O SEA POR UNA LETRA
+        # PARA ESO BASTA CON MEDIR LA LONGITUD DE LA PALABRA Y SI SOLO
+        # ES UNA LETRA, EFECTUAR UNA QUERY CON LIKE 
+        #datos = cursor.fetchone()
     except:
         return (False)
 

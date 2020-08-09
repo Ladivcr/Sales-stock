@@ -74,10 +74,9 @@ def FilterInventario():
 def SearchInventario():
     import functions
     word = request.form['searching']
-    print(word)
+    #print("myword:",word)
     word = word.lower()
     mydata = functions.buscar_articulo_palabra(word)
-    print(mydata)
     if mydata == False:
         return("<h1> No fue posible la búsqueda, contacte al administrador</h1>")
     else:
