@@ -73,6 +73,12 @@
         <option value="Z">Z</option>
       </select>
     <button type="submit" name="submit_button" value="Mostrar">Filtrar</button>
+
+    <!-- MENSAJE DE ADVERTENCIA PARA EL USUARIO -->
+    {% if error %}
+    <!-- <center><h1>{{ error }}</h1></center> -->
+    <script type="text/javascript">alert("{{ error }}")</script>
+    {% endif %}
     </form>
 
 {% endblock %}

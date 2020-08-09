@@ -49,7 +49,7 @@ def actualizar_inventario(IDProducto, NombreProducto, Especificaciones, Cantidad
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
             print("Database does not exist")
         else:
-            print("Error: ",err)
+            print("Error: ", err)
         return False
 
 
@@ -62,8 +62,16 @@ def desplegar_lista_inventario():
         cursor = cnx.cursor()
         query = ('SELECT * FROM inventario;')
         cursor.execute(query)
-    except:
-        return(False)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return ("Something is wrong with your user name or password", False)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return ("Database does not exist", False)
+        else:
+            return(err, False)
+
+        return ("No fue posible desplegar la lista", False)
+
 
     mydata = []
     #datos = cursor.fetchall()
@@ -72,7 +80,7 @@ def desplegar_lista_inventario():
 
     cnx.commit()
     cnx.close()
-    return(mydata)
+    return (mydata, True)
 
 
 """
@@ -86,8 +94,15 @@ def desplegar_lista_inventario_letra(letter):
         cursor.execute(query, (letter,))
         datos = cursor.fetchall()
         #print(datos)
-    except:
-        return(False)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return ("Something is wrong with your user name or password", False)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return ("Database does not exist", False)
+        else:
+            return (err, False)
+
+        return ("No fue posible filtrar la lista por letra", False)
 
     mydata = []
     for (ID, Nombre, Especificaciones, Cantidad, Precio) in datos:
@@ -96,27 +111,30 @@ def desplegar_lista_inventario_letra(letter):
     cnx.commit()
     cnx.close()
     #print(mydata)
-    return(mydata)
+    return (mydata, True)
 
 """
 FUNCION: BUSCAR POR NOMBRE
 """
-def buscar_articulo_palabra(word):
+def buscar_articulo_nombre(word):
     try:
-        print("El word.", word)
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
-        print("El word.", word)
         cursor = cnx.cursor()
-        print("El word.", word)
         query = ("SELECT * FROM inventario WHERE Nombre_Producto = %s;")
-        print("El word.", word)
         cursor.execute(query,(word,))
         # IMPLEMENTAR LA BÚSQUEDA POR COINCIDENCIA. O SEA POR UNA LETRA
         # PARA ESO BASTA CON MEDIR LA LONGITUD DE LA PALABRA Y SI SOLO
-        # ES UNA LETRA, EFECTUAR UNA QUERY CON LIKE 
+        # ES UNA LETRA, EFECTUAR UNA QUERY CON LIKE
         #datos = cursor.fetchone()
-    except:
-        return (False)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return ("Something is wrong with your user name or password", False)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return ("Database does not exist", False)
+        else:
+            return (err, False)
+
+        return ("No fue posible hacer la búsqueda por nombre", False)
 
     mydata = []
     for (ID, Nombre, Especificaciones, Cantidad, Precio) in cursor:
@@ -125,4 +143,4 @@ def buscar_articulo_palabra(word):
     cnx.commit()
     cnx.close()
     print(mydata)
-    return(mydata)
+    return (mydata, True)

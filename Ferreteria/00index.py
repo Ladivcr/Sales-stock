@@ -7,14 +7,16 @@ Code: Principal
 About: Work in back-end for the control of web page
 """
 # Importamos la librería
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 import webbrowser
-import mysql.connector
-from mysql.connector import errorcode
 
 # Creamos el objeto de flask que nos servira para lanzar el servidor
 # y la página web
 app = Flask(__name__)
+
+
+# Establece llave secreta
+app.secret_key = "Eladiv"
 
 #Indicamos la ruta para la página principal, que corresponde a la ruta donde
 # nosotros estamos corriendo el archivo
@@ -47,8 +49,17 @@ Apartado: INVENTARIO
 def Inventario():
     import functions
     # Función para desplegar la lista de inventario
-    mydata = functions.desplegar_lista_inventario()
-    return (render_template("Inventario.html", productos = mydata))
+    mydata, state = functions.desplegar_lista_inventario()
+    if state == True:
+        return (render_template("Inventario.html", productos = mydata))
+    if state == False:
+        #print(mydata)
+        mydata = str(mydata)
+        message = ("{0}".format(mydata))
+        return (render_template("Inventario.html", error = message, productos = []))
+    else:
+        return ("<h1>¡Ups! Parece que este error en Inventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
+
 
 
 @app.route("/Inventario/Actualizar-Inventario")
@@ -62,25 +73,34 @@ def FilterInventario():
     letter = request.form['valuesLetter']
     letter = letter.lower()
     #print(letter)
-    mydata = functions.desplegar_lista_inventario_letra(letter)
+    mydata, state = functions.desplegar_lista_inventario_letra(letter)
     #print(mydata)
-    if mydata == False:
-        return("<h1> No fue posible filtrar, contacte al administrador</h1>")
-    else:
+    if state == True:
         return (render_template("Inventario.html", productos = mydata))
+    if state == False:
+        mydata = str(mydata)
+        message =("{0}".format(mydata))
+        return (render_template("Inventario.html", error = message, productos = []))
+    else:
+        return ("<h1>¡Ups! Parece que este error en FilterInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
 #---FUNCION PARA *BUSCAR* ARTICULOS POR NOMBRE EN EL INVENTARIO------
 @app.route("/Inventario/SearchInventario", methods = ['POST'])
 def SearchInventario():
     import functions
     word = request.form['searching']
-    #print("myword:",word)
+    word = str(word)
+    #print("myword:",word, type(word))
     word = word.lower()
-    mydata = functions.buscar_articulo_palabra(word)
-    if mydata == False:
-        return("<h1> No fue posible la búsqueda, contacte al administrador</h1>")
-    else:
+    mydata, state = functions.buscar_articulo_nombre(word)
+    if state == True:
         return (render_template("Inventario.html", productos = mydata))
+    if state == False:
+        mydata = str(mydata)
+        message = ("{0}".format(mydata))
+        return (render_template("Inventario.html", error = message, productos = []))
+    else:
+        return("<h1>¡Ups! Parece que este error en SearchInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 ########################################################################
 """
 Apartado: Contacto
