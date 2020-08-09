@@ -101,6 +101,7 @@ def SearchInventario():
         return (render_template("Inventario.html", error = message, productos = []))
     else:
         return("<h1>¡Ups! Parece que este error en SearchInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
+
 ########################################################################
 """
 Apartado: Contacto
