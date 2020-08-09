@@ -27,6 +27,14 @@ hostDB = credentials["credentials"][0]["host"]
 nameDB = credentials["credentials"][0]["database"]
 
 """
+###############################
+######### FUNCIONES ###########
+###############################
+######### INVENTARIO ##########
+###############################
+"""
+
+"""
 Función: AÑADIR PRODUCTOS AL INVENTARIO
 """
 def actualizar_inventario(IDProducto, NombreProducto, Especificaciones, CantidadProducto, Precio):
