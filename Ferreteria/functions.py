@@ -78,12 +78,12 @@ def desplegar_lista_inventario():
 """
 Función: DESPLEGAR LOS PRODUCTOS POR LETRA
 """
-def desplegar_lista_inventario_letra(data_query):
+def desplegar_lista_inventario_letra(letter):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
         query = ('SELECT * FROM inventario WHERE  Nombre_Producto LIKE %s"%";')
-        cursor.execute(query, (data_query,))
+        cursor.execute(query, (letter,))
         datos = cursor.fetchall()
         #print(datos)
     except:
@@ -91,6 +91,28 @@ def desplegar_lista_inventario_letra(data_query):
 
     mydata = []
     for (ID, Nombre, Especificaciones, Cantidad, Precio) in datos:
+        mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
+
+    cnx.commit()
+    cnx.close()
+    #print(mydata)
+    return(mydata)
+
+"""
+FUNCION: BUSCAR POR NOMBRE
+"""
+def buscar_articulo_palabra(word):
+    try:
+        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        cursor = cnx.cursor()
+        query('SELECT * FROM inventario WHERE Nombre_Producto = %s;')
+        cursor.execute(query,(word,))
+        datos = cursor.fetchone()
+    except:
+        return (False)
+
+    mydata = []
+    for (ID, Nombre, Especificaciones, Cantidad, Precio) in cursor:
         mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
 
     cnx.commit()

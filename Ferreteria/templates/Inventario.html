@@ -9,10 +9,10 @@
 {% block content %}
 
 
-  <form  class = "menuINVENTARIO" action="/Inventario/DisplayInventario" method="post">
+  <form  class = "menuINVENTARIO" action="/Inventario/SearchInventario" method="post">
     <ul id="horizontal">
-    <li><a><input type = "text" name="filter" class="" type="search"  placeholder="Introduce el nombre del producto" ></a></li>
-    <li><a><button class="" type="submit">Buscar producto</button></a></li>
+    <li><a><input type = "text" name="searching" type="search"  placeholder="Introduce el nombre del producto" ></a></li>
+    <li><a><button type="submit">Buscar producto</button></a></li>
     <li><a href="{{url_for('InventarioActualizar')}}"><b>Acualizar Inventario</b></a></li>
     </ul>
   </form>
