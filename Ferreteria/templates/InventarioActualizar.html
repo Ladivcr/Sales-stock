@@ -6,19 +6,20 @@
 {% endblock %}
 
 {% block content %}
-<form action="/my-handling-form-page" method="post">
+<form action="#" method="post">
  <ul>
   <li>
     <label for="code">Código:</label>
-    <input type="text" id="code" name="product_code">
+    <input type="text" id="code" name="product_code" placeholder="">
+    <center><button class="btn_search" name="search" type="submit">Buscar atributos mediante su código</button></center>
   </li>
   <li>
     <label for="name">Nombre:</label>
-    <input type="text" id="name" name="product_name">
+    <input type="text" id="name" name="product_name" placeholder="">
   </li>
   <li>
     <label for="specifications">Especificaciones:</label>
-    <input type="text" id="specifications" name="product_specifications">
+    <input type="text" id="specifications" name="product_specifications" placeholder="">
   </li>
   <li>
     <label for="quantity">Cantidad:</label>
@@ -26,15 +27,19 @@
   </li>
   <li>
     <label for="price">Precio:</label>
-    <input type="number" id="price" name="product_price">
+    <input type="number" id="price" name="product_price" placeholder="">
   </li>
  </ul>
  <br>
  <br>
- <center><button class="btn_add" name="add" type="submit">Añadir al inventario</button></center>
+ <center><button class="btn_add" name="add" type="submit"><b>Añadir al inventario</b></button></center>
  <br>
- <center><button class="btn_update" name="update" type="submit">Actualizar producto</button></center>
+ <center><button class="btn_update" name="update" type="submit"><b>Actualizar producto</b></button></center>
  <br>
- <center><button class="btn_delete" name="delete" type="submit">Eliminar producto</button></center>
+ <center><button class="btn_delete" name="delete" type="submit"><b>Eliminar producto</b></button></center>
 </form>
+
+
+<center><p>*<b>Buscar atributos mediante su código</b> tiene como objetivo facilitar la actualización del atributo del producto en cuestión.</p></center>
+
 {% endblock %}

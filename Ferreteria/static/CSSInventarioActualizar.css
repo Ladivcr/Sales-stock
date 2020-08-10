@@ -69,3 +69,28 @@ button {
      entre las etiquetas y sus campos de texto */
   margin-left: .5em;
 }
+
+
+.btn_add {
+    padding: 10px 20px;
+    background-color: #01DF01;
+    color: black;
+}
+
+.btn_update {
+  padding: 10px 20px;
+  background-color: #D7DF01;
+  color: black;
+}
+
+.btn_delete {
+  padding: 10px 20px;
+  background-color: #DF0101;
+  color: white;
+}
+
+.btn_search {
+  margin-top: 10px;
+  padding: 5px 20px;
+  color: black;
+}
