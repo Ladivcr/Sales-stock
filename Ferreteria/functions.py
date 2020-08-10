@@ -149,3 +149,23 @@ def buscar_articulo_nombre(word):
     cnx.close()
     print(mydata)
     return (mydata, True)
+
+
+"""
+#############################################################
+Las siguiente funciones serán para realizar las operaciones #
+elementales: Añadir, Modificar y Eliminar####################
+#########################################
+"""
+
+"""
+FUNCION: AÑADIR PRODUCTO AL INVENTARIO
+"""
+
+"""
+FUNCION: ELIMINAR PRODUCTO DEL INVENTARIO
+"""
+
+"""
+FUNCION: MODIFICAR PRODUCTO DEL INVENTARIO
+"""

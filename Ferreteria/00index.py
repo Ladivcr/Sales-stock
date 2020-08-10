@@ -60,12 +60,6 @@ def Inventario():
     else:
         return ("<h1>¡Ups! Parece que este error en Inventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
-
-
-@app.route("/Inventario/Actualizar-Inventario")
-def InventarioActualizar():
-    return (render_template("InventarioActualizar.html"))
-
 #---FUNCION PARA *FILTRAR* LA LISTA DE ARTICULOS EN EL INVENTARIO------
 @app.route("/Inventario/FilterInventario", methods = ['POST'])
 def FilterInventario():
@@ -101,6 +95,21 @@ def SearchInventario():
         return (render_template("Inventario.html", error = message, productos = []))
     else:
         return("<h1>¡Ups! Parece que este error en SearchInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
+
+##########################################################################
+"""
+Apartado: Actualizar El Inventario
+"""
+@app.route("/Inventario/Actualizar-Inventario")
+def InventarioActualizar():
+    return (render_template("InventarioActualizar.html"))
+
+#----FUNCION PARA CONTROLAR EL TIPO DE *OPERACION* A REALIZAR-------
+#----*OPERACION: Añadir, Eliminar y Actualizar
+@app.route("/Inventario/Actualizar-Inventario/Administrar", methods = ['POST'])
+def Administrar():
+    import functions
+    pass
 
 ########################################################################
 """

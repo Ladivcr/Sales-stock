@@ -30,6 +30,10 @@
   background-color: #4E94AB;
 }
 
+.menuINVENTARIO li:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 
 /*
 #horizontal {
