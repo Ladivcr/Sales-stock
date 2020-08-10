@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<form class="formulario" action="/my-handling-form-page" method="post">
+<form action="/my-handling-form-page" method="post">
  <ul>
   <li>
     <label for="code">Código:</label>
@@ -31,8 +31,10 @@
  </ul>
  <br>
  <br>
- <button type="submit">Añadir al inventario</button>
- <button type="submit">Actualizar producto</button>
- <button type="submit">Eliminar producto</button>
+ <center><button class="btn_add" name="add" type="submit">Añadir al inventario</button></center>
+ <br>
+ <center><button class="btn_update" name="update" type="submit">Actualizar producto</button></center>
+ <br>
+ <center><button class="btn_delete" name="delete" type="submit">Eliminar producto</button></center>
 </form>
 {% endblock %}
