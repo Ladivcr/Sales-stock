@@ -6,40 +6,61 @@
 {% endblock %}
 
 {% block content %}
-<form action="#" method="post">
+<!-- MENSAJE DE ADVERTENCIA PARA EL USUARIO -->
+{% if error %}
+<!-- <center><h1>{{ error }}</h1></center> -->
+<script type="text/javascript">alert("{{ error }}")</script>
+{% endif %}
+
+
+<form action="/Inventario/Actualizar-Inventario/Administrar" method="post">
+{% if longitud|int() > 0 %}
+  {% set code = producto[0][0] %}
+  {% set name = producto[0][1] %}
+  {% set specifications = producto[0][2] %}
+  {% set quantity = producto[0][3] %}
+  {% set price = producto[0][4] %}
+{% else %}
+  {% set code = " " %}
+  {% set name = " " %}
+  {% set specifications = " " %}
+  {% set quantity = " " %}
+  {% set price = " " %}
+{% endif %}
  <ul>
   <li>
     <label for="code">Código:</label>
-    <input type="text" id="code" name="product_code" placeholder="">
-    <center><button class="btn_search" name="search" type="submit">Buscar atributos mediante su código</button></center>
+    <input type="text" id="code" name="product_code" placeholder="{{ code }}" required>
+    <center><button class="btn_search" name="search" type="submit" value="search_code">Buscar atributos mediante su código</button></center>
   </li>
   <li>
     <label for="name">Nombre:</label>
-    <input type="text" id="name" name="product_name" placeholder="">
+    <input type="text" id="name" name="product_name" placeholder="{{ name }}">
   </li>
   <li>
     <label for="specifications">Especificaciones:</label>
-    <input type="text" id="specifications" name="product_specifications" placeholder="">
+    <input type="text" id="specifications" name="product_specifications" placeholder="{{ specifications }}">
   </li>
   <li>
     <label for="quantity">Cantidad:</label>
-    <input type="number" id="quantity" name="product_quantity">
+    <input type="number" id="quantity" name="product_quantity" placeholder="{{ quantity }}">
   </li>
   <li>
     <label for="price">Precio:</label>
-    <input type="number" id="price" name="product_price" placeholder="">
+    <input type="number" id="price" name="product_price" placeholder="{{ price }}">
   </li>
  </ul>
  <br>
  <br>
- <center><button class="btn_add" name="add" type="submit"><b>Añadir al inventario</b></button></center>
- <br>
- <center><button class="btn_update" name="update" type="submit"><b>Actualizar producto</b></button></center>
- <br>
- <center><button class="btn_delete" name="delete" type="submit"><b>Eliminar producto</b></button></center>
+ <center><select name="Operations" class="list"></center>
+   <option disabled="" selected=""><p lang="es">Elegir operación a realizar</p></option>
+   <option value="add">Añadir producto al inventario</option>
+   <option value="update">Actualizar producto en el inventario</option>
+   <option value="delete">Eliminar producto del inventario</option>
+ </select>
+  <center><button class="btn_operation" name="btn_operation" type="submit">Efectuar operación</button></center>
 </form>
-
-
-<center><p>*<b>Buscar atributos mediante su código:</b> tiene como objetivo facilitar la actualización del atributo del producto en cuestión.</p></center>
+<br>
+<center><p>*<b>Buscar atributos mediante su código:</b> tiene como objetivo facilitar la actualización/eliminación del atributo del producto en cuestión.<br>Solo introduzca el código del producto.</p></center>
 
 {% endblock %}

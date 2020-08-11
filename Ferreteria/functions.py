@@ -159,6 +159,40 @@ elementales: Añadir, Modificar y Eliminar####################
 """
 
 """
+FUNCION: BUSQUEDA MEDIANTE CODIGO
+"""
+def busqueda_por_codigo(code):
+    try:
+        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        cursor = cnx.cursor()
+        query = ("SELECT * FROM inventario WHERE ID_Producto = %s;")
+        cursor.execute(query,(code,))
+        #datos = cursor.fetchone()
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return ("Something is wrong with your user name or password", False)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return ("Database does not exist", False)
+        else:
+            return (err, False)
+
+        return ("No fue posible hacer la búsqueda por nombre", False)
+
+    mydata = []
+    for (ID, Nombre, Especificaciones, Cantidad, Precio) in cursor:
+        mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
+
+    cnx.commit()
+    cnx.close()
+    #print("adentr0",mydata)
+    if len(mydata) == 0:
+        return("No se encontro un producto con ese código", False)
+    else:
+        #print(mydata)
+        return (mydata, True)
+
+
+"""
 FUNCION: AÑADIR PRODUCTO AL INVENTARIO
 """
 

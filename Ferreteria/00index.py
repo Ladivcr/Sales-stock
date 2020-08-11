@@ -102,14 +102,40 @@ Apartado: Actualizar El Inventario
 """
 @app.route("/Inventario/Actualizar-Inventario")
 def InventarioActualizar():
-    return (render_template("InventarioActualizar.html"))
+    return (render_template("InventarioActualizar.html", longitud = 0))
 
 #----FUNCION PARA CONTROLAR EL TIPO DE *OPERACION* A REALIZAR-------
 #----*OPERACION: Añadir, Eliminar y Actualizar
 @app.route("/Inventario/Actualizar-Inventario/Administrar", methods = ['POST'])
 def Administrar():
     import functions
-    pass
+    try:
+        code = request.form['product_code']
+
+        #####PARA BUSQUEDA POR CODIGO########
+        search_by_code = request.form['search'] #botón de búsqueda por código
+        search_by_code = str(search_by_code)
+
+        if search_by_code == "search_code" and len(code) != 0:
+            # Efectuar la búsqueda por código
+            mydata, state = functions.busqueda_por_codigo(code)
+
+            if state == False:
+                error = str(mydata)
+                message = ("{0}".format(mydata))
+                return (render_template("InventarioActualizar.html", error = message, longitud = 0))
+            if state == True:
+                #print(len(mydata[0]))
+                return (render_template("InventarioActualizar.html", producto = mydata, longitud = len(mydata[0])))
+
+        else:
+            name = request.form['product_name']
+            specifications = request.form['product_specifications']
+            quantity = request.form['product_quantity']
+            price = request.form['product_price']
+
+    except:
+        print("Tartaglia:")
 
 ########################################################################
 """

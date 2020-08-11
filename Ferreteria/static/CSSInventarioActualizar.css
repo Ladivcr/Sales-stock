@@ -70,7 +70,7 @@ button {
   margin-left: .5em;
 }
 
-
+/*
 .btn_add {
     padding: 10px 20px;
     background-color: #01DF01;
@@ -88,9 +88,17 @@ button {
   background-color: #DF0101;
   color: white;
 }
+*/
 
 .btn_search {
   margin-top: 10px;
   padding: 5px 20px;
   color: black;
+}
+
+.btn_operation {
+  margin-top: 10px;
+  padding: 5px 20px;
+  color: black;
+  background-color: #01DF01;
 }
