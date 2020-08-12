@@ -141,7 +141,9 @@ def busqueda_por_codigo(code):
         cursor = cnx.cursor()
         query = ("SELECT * FROM inventario WHERE ID_Producto = %s;")
         cursor.execute(query,(code,))
-        datos = cursor.fetchone()
+        #datos = cursor.fetchone()
+
+        print("dats", cursor)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             return ("Something is wrong with your user name or passwordBPC", False)
@@ -159,10 +161,10 @@ def busqueda_por_codigo(code):
     cnx.commit()
     cnx.close()
 
-    if len(mydata[0]) == 0:
+    if len(mydata) == 0:
         return("No se encontro un producto con ese código", False)
     else:
-        #print(mydata)
+        #print("mydata:", mydata)
         return (mydata, True)
 
 

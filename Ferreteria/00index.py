@@ -109,46 +109,36 @@ def InventarioActualizar():
 @app.route("/Inventario/Actualizar-Inventario/Administrar", methods = ['POST'])
 def Administrar():
     import functions
+    code = request.form['product_code']
+    #En el código de try intentamos la búsqueda por Código
+    #Si no se presiona la búsqueda por código
+    #entonces hacemos la peticion de la operacion: añadir, eliminar o actualizar
     try:
-        code = request.form['product_code']
-        try:
-            #####PARA BUSQUEDA POR CODIGO########
-            try:
-                search_by_code = request.form['search'] #botón de búsqueda por código
-                search_by_code = str(search_by_code)
-                #search_by_code == "search_code" and len(code) != 0:
-            except:
-                search_by_code = 0
+        search_by_code = request.form['search']
+        search_by_code = str(search_by_code)
+        #-------------BUSQUEDA POR CODIGO---------------
+        if search_by_code == 'SearchCode':
 
-            if search_by_code == "search_code":
-                # Efectuar la búsqueda por código
-                mydata, state = functions.busqueda_por_codigo(code)
-                if state == False:
-                    error = str(mydata)
-                    message = ("{0}".format(mydata))
-                    return (render_template("InventarioActualizar.html", error = message, longitud = 0))
-                if state == True:
-                    #print(len(mydata[0]))
-                    return (render_template("InventarioActualizar.html", producto = mydata, longitud = len(mydata[0])))
-
-            else:
-                return("<h1> ¡Rayos! No había contemplado esto</h1>")
-                name = request.form['product_name']
-                specifications = request.form['product_specifications']
-                quantity = request.form['product_quantity']
-                price = request.form['product_price']
-
-        except:
-            operation = request.form['Operations']
-            operation = str(operation)
-
-            if operation == 'delete':
-                mydata, state = functions.eliminar_por_codigo(code)
+            mydata, state = functions.busqueda_por_codigo(code)
+            if state == True:
+                #print(len(mydata[0]))
+                return (render_template("InventarioActualizar.html", producto = mydata, longitud = len(mydata[0])))
+            elif state == False:
                 error = str(mydata)
                 message = ("{0}".format(mydata))
                 return (render_template("InventarioActualizar.html", error = message, longitud = 0))
+        else:
+            return("<h1> ¡Ups! Parece que este error no lo vio el administrador</h1>")
 
-            if operation == 'add':
+    except:
+        operation = request.form['Operations']
+        if operation == 'off':
+            message = "off-Debes elegir la operación que deseas realizar"
+            return (render_template("InventarioActualizar.html", error = message, longitud = 0))
+
+        #-----------------OPERACION AÑADIR-----------------------
+        elif operation == 'add':
+            try:
                 name = request.form['product_name']
                 name = name.lower()
                 specifications = request.form['product_specifications']
@@ -156,53 +146,31 @@ def Administrar():
                 price = request.form['product_price']
                 mydata, state = functions.add_producto(code, name, specifications, quantity, price)
                 if state == True:
-                    message = str(mydata)
-                    message = ("{0}".format(mydata))
-                    return (render_template("InventarioActualizar.html", error = message, longitud = 0))
-                if state == False:
+                    #print(len(mydata[0]))
+                    message = "Producto Añadido Correctamente"
+                    return (render_template("InventarioActualizar.html", error = message, producto = mydata, longitud = len(mydata[0])))
+                elif state == False:
                     error = str(mydata)
                     message = ("{0}".format(mydata))
                     return (render_template("InventarioActualizar.html", error = message, longitud = 0))
-
-            if operation == 'update':
-                #####---NOMBRE-----
-                try:
-                    name = request.form['product_name']
-                    name = name.lower()
-                except:
-                    name = 0
-                ######----ESPECIFICACIONES-----
-                try:
-                    specifications = request.form['product_specifications']
-                except:
-                    specifications = 0
-                ####-----CANTIDAD----
-                try:
-                    quantity = request.form['product_quantity']
-                except:
-                    quantity = 0
-                #####-----PRECIO-----
-                try:
-                    price = request.form['product_price']
-                except:
-                    price = 0
-
-                mydata, state = functions.update_producto(code, name, specifications, quantity, price)
-                if state == True:
-                    message = str(mydata)
-                    message = ("{0}".format(mydata))
-                    return (render_template("InventarioActualizar.html", error = message, longitud = 0))
-                if state == False:
-                    error = str(mydata)
-                    message = ("{0}".format(mydata))
-                    return (render_template("InventarioActualizar.html", error = message, longitud = 0))
-            else:
-                message = "Por favor introduce todos los datos y elige la operación que deseas realizar"
+            except:
+                message = "add-Debes introducir todos los valores del producto"
                 return (render_template("InventarioActualizar.html", error = message, longitud = 0))
 
-    except:
-        message = "Debes elegir la operación que deseas realizar"
-        return (render_template("InventarioActualizar.html", error = message, longitud = 0))
+        #--------OPERACION ELIMINAR----------------
+        elif operation == 'delete':
+            # Para eliminar basta con introducir el código del producto
+            mydata, state = functions.eliminar_por_codigo(code)
+            if state == False:
+                error = str(mydata)
+                message = ("{0}".format(mydata))
+                return (render_template("InventarioActualizar.html", error = message, longitud = 0))
+            elif state == True:
+                message = "Producto Eliminado Correctamente"
+                return (render_template("InventarioActualizar.html", error = message, producto = mydata, longitud = len(mydata[0])))
+
+        elif operation == update:
+            pass
 
 ########################################################################
 """
