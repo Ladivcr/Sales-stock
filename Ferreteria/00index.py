@@ -177,28 +177,10 @@ def Administrar():
             try:
                 name = request.form['product_name']
                 name = name.lower()
-            except:
-                name = 0
-                print("nombreeeeeeeeeeeee")
-            try:
                 specifications = request.form['product_specifications']
-            except:
-                specifications = 0
-                print("ESPEEEEE")
-
-            try:
                 quantity = request.form['product_quantity']
-            except:
-                quantity = 0
-                print("dsadsadsa")
-
-            try:
                 price = request.form['product_price']
-            except:
-                price = 0
-                print("preeeee")
 
-            else:
                 mydata, state = functions.update_producto(code, name, specifications, quantity, price)
                 if state == False:
                     error = str(mydata)
@@ -208,6 +190,8 @@ def Administrar():
                     error = str(mydata)
                     message = ("{0}".format(mydata))
                     return (render_template("InventarioActualizar.html", error = message, longitud = 0))
+            except:
+                return ("<h1>¡ups! Este error no lo vi-update</h1>")
 
 ########################################################################
 """

@@ -228,24 +228,23 @@ def update_producto(code, name, specifications, quantity, price):
     columnas_query = {"Nombre_Producto": name, "Especificaciones_Producto": specifications, "Cantidad_Producto": quantity, "Precio_Producto": price}
     values = columnas_query.values() #Obtenemos los valores de cada clave
     values = list(values)
-    print(values)
-    print("sadsadas")
-    changes = values.count(0) # Contamos cuantos valores con cero hay
-    print("dsadsadsddd")
-    print(changes)
-    if changes == 2:
+    print("VALORES:", values)
+    changes = values.count("") # Contamos cuantos valores con cero hay
+    print("Cabmios:", changes)
+    if changes == 3:
         # Si hay tres valores con cero significa que solo es una columna en la query
-        for value in columnas_query.values():
+        for value in values:
             key_by_value = list(columnas_query.keys())[list(columnas_query.values()).index(value)]
-            if key_by_value != 0 or key_by_value != '':
-                my_query = "UPDATE inventario SET %s = %s WHERE ID_Producto = %s;"
+            print(key_by_value)
+            if  key_by_value != '':
+                #my_query = "UPDATE inventario SET %s = %s WHERE ID_Producto = %s;"
                 data_query = (key_by_value, value, code)
 
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        print("mi consulta: ", my_query)
-        query = (my_query)
+        print("mis datos consulta: ", data_query)
+        query = ("UPDATE inventario SET %s = %s WHERE ID_Producto = %s;")
         cursor.execute(query, data_query)
         #datos = cursor.fetchone()
     except mysql.connector.Error as err:
