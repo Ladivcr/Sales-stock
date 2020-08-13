@@ -224,13 +224,28 @@ FUNCION: MODIFICAR PRODUCTO DEL INVENTARIO
 """
 #UPDATE tabla SET columna = valor [WHERE condiciones];
 def update_producto(code, name, specifications, quantity, price):
+    # Haremos algunas manipulaciones en los datos para formar la query & data_query
+    columnas_query = {"Nombre_Producto": name, "Especificaciones_Producto": specifications, "Cantidad_Producto": quantity, "Precio_Producto": price}
+    values = columnas_query.values() #Obtenemos los valores de cada clave
+    values = list(values)
+    print(values)
+    print("sadsadas")
+    changes = values.count(0) # Contamos cuantos valores con cero hay
+    print("dsadsadsddd")
+    print(changes)
+    if changes == 2:
+        # Si hay tres valores con cero significa que solo es una columna en la query
+        for value in columnas_query.values():
+            key_by_value = list(columnas_query.keys())[list(columnas_query.values()).index(value)]
+            if key_by_value != 0 or key_by_value != '':
+                my_query = "UPDATE inventario SET %s = %s WHERE ID_Producto = %s;"
+                data_query = (key_by_value, value, code)
+
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        # EMPLEAR DICCIONARIO PARA HACER LA ACTUALIZACIÓN
-        data_query = (code, name, specifications, quantity, price)
-        #INSERT INTO ex2_Asignatura (Clave, Nombre, Semestre, Creditos, Clave_Plan, Tipo) VALUES ('0117','Pensamiento del ambiente','0',6,'1800', 'Optativa');
-        query = ("UPDATE inventario SET (ID_Producto, Nombre_Producto, Especificaciones_Producto, Cantidad_Producto, Precio_Producto) WHERE ID_Producto = %s;")
+        print("mi consulta: ", my_query)
+        query = (my_query)
         cursor.execute(query, data_query)
         #datos = cursor.fetchone()
     except mysql.connector.Error as err:
