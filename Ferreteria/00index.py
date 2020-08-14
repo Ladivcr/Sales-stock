@@ -25,6 +25,7 @@ app.secret_key = "Eladiv"
 def index():
     return (render_template("index.html"))
 
+
 ########################################################################
 """
 Apartado: REALIZAR VENTAS

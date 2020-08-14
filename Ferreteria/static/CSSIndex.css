@@ -1,0 +1,106 @@
+/*PARA LA BARRA DE FILTRADO EN INVENTARIO*/
+
+.menuINDEX ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  background-color: #4E94AB;
+}
+/*
+.menuINVENTARIO li {
+  flex-grow: 1;
+  text-align: right;
+}*/
+
+/*
+.menus li:hover {
+  background: rgba(0, 0, 0, 0.3);
+}*/
+
+.menuINDEX li a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-family: Arial;
+  font-size: 18px;
+  float: right;
+  padding: 10px 10px 5px;
+  background-color: #4E94AB;
+}
+
+.menuINDEX li:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+
+/*
+#horizontal {
+ padding: 0;
+ }
+
+#horizontal li {
+ display: inline;
+ flex-grow: 1;
+ text-align: right;
+ }
+
+
+  #horizontal li a {
+ font-family: Arial;
+ font-size: 18px;
+ text-decoration: none;
+ float: right;
+ padding: 10px;
+ background-color: #4E94AB;
+ color: #fff;
+ display: inline;
+ padding: 15px 20px;
+ color: #fff;
+ text-decoration: none;
+ }
+
+
+ #horizontal ul {
+   margin: 0;
+   list-style: none;
+   padding: 0;
+   display: flex;
+   background-color: #4E94AB;
+ }
+*/
+
+/*
+#main-container{
+  margin: 150px auto;
+  width: 600px;
+}
+*/
+table{
+  width: 100%;
+  background-color: white;
+  text-align: center;
+  border-collapse: collapse;
+
+}
+
+th, td{
+  border: solid 1px black,
+  padding; 15px;
+
+}
+
+thead{
+  background-color: #4E94AB;
+  color: white;
+  border-bottom: solid 5px #000;
+}
+
+tr:nth-child(even){
+  background-color: #ddd;
+}
+
+tr:hover td{
+  background-color: #369681;
+  color: white;
+}

@@ -222,7 +222,9 @@ def add_producto(code, name, specifications, quantity, unity, price):
 """
 FUNCION: MODIFICAR PRODUCTO DEL INVENTARIO
 """
-# LA DEJAMOS PENDIENTE
+# --------------------LA DEJAMOS PENDIENTE-----------------
+
+
 #UPDATE tabla SET columna = valor [WHERE condiciones];
 def update_producto(code, name, specifications, quantity, unity, price):
     # Haremos algunas manipulaciones en los datos para formar la query & data_query
