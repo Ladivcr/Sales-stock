@@ -1,10 +1,65 @@
 {% extends "formatoPrincipal.html" %}
 
 {% block content2 %}
-<title>Realizar-Venta</title>
+<link rel="stylesheet" href="{{url_for('static',filename='CSSRealizarVenta.css')}}">
+<title>Realizar Venta</title>
 {% endblock %}
 
 {% block content %}
-<p lang="es" align = "center">Realizar Venta</p>
+
+<!-- MENSAJE DE ADVERTENCIA PARA EL USUARIO -->
+{% if error %}
+<!-- <center><h1>{{ error }}</h1></center> -->
+<script type="text/javascript">alert("{{ error }}")</script>
+{% endif %}
+
+
+<form action="/RealizarVenta/#" method="post">
+
+ <ul>
+  <li>
+    <label for="code">Código del producto:</label>
+    <input type="text" id="code" name="product_code" placeholder="Introduce el código del producto" required>
+    <center><button class="btn_search" name="search" type="submit" value="SearchCode">Buscar atributos mediante su código</button></center>
+  </li>
+
+  <li>
+    <label for="name">Nombre del producto:</label>
+    <input type="text" id="name" name="product_name"  placeholder="Introduce el nombre del producto">
+  </li>
+
+  <li>
+    <label for="quantity">Cantidad:</label>
+    <input type="number" id="quantity" name="product_quantity" step="any" placeholder="Introduce la cantidad de venta">
+  </li>
+
+  <li>
+    <label for="unity">Unidad:</label>
+    <select name="product_unity" class="list">
+    <option  selected="" value="off"><p lang="es">Escoge la unidad del producto </p></option>
+    <option value="Kg">Kilogramo</option>
+    <option value="L">Litro</option>
+    <option value="Pza">Por pieza</option>
+  </select>
+</li>
+
+<li>
+  <label for="date">Fecha de venta:</label>
+  <input type="date" id="datee" name="sale_date">
+</li>
+
+  <li>
+    <label for="price">Total a pagar:</label>
+    <input type="number" id="price" name="sale_price" step="any" placeholder="¿Cuánto es de este producto?">
+  </li>
+ </ul>
+ <br>
+  <center><button class="btn_carrito" name="btn_carrito" value = "addCar" type="submit">Añadir al carrito</button></center>
+  <br>
+   <center><button class="btn_venta" name="btn_venta" value = "doSale" type="submit"><b>Efectuar venta</b></button></center>
+</form>
+<center><p>*<b>Buscar atributos mediante su código:</b> tiene como objetivo facilitar el llenado de los atributos:
+   Nombre, Cantidad Y Unidad.<br>Solo introduzca el código del producto y presione buscar.</p></center>
+
 
 {% endblock %}

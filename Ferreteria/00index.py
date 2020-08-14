@@ -34,13 +34,6 @@ Apartado: REALIZAR VENTAS
 def RealizarVenta():
     return (render_template("RealizarVenta.html"))
 
-########################################################################
-"""
-Apartado: VENTAS DEL DÍA
-"""
-@app.route("/Ventas-Del-Dia")
-def VentasDelDia():
-    return (render_template("VentasDelDia.html"))
 
 ########################################################################
 """
