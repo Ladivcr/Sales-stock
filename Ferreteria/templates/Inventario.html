@@ -11,7 +11,7 @@
 
   <form  class = "menuINVENTARIO" action="/Inventario/SearchInventario" method="post">
     <ul id="horizontal">
-    <li><a><input name="searching" type="search"  placeholder="Introduce el nombre del producto" required></a></li>
+    <li><a><input name="searching" type="search"  placeholder="Nombre completo del producto" required></a></li>
     <li><a><button type="submit">Buscar producto</button></a></li>
     <li><a href="{{url_for('InventarioActualizar')}}"><b>Acualizar Inventario</b></a></li>
     </ul>
@@ -26,6 +26,7 @@
         <th scope="col">Nombre</th>
         <th scope="col">Especificaciones</th>
         <th scope="col">En existencia</th>
+        <th scope="col">Unidad</th>
         <th scope="col">Precio c/u</th>
       </tr>
     </thead>
@@ -37,6 +38,7 @@
         <td>{{ value[2] }}</td>
         <td>{{ value[3] }}</td>
         <td>{{ value[4] }}</td>
+        <td>{{ value[5] }}
       </tr>
       {% endfor %}
       </table>

@@ -42,7 +42,7 @@ def desplegar_lista_inventario():
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        query = ('SELECT * FROM inventario;')
+        query = ('SELECT * FROM Inventario;')
         cursor.execute(query)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -57,8 +57,8 @@ def desplegar_lista_inventario():
 
     mydata = []
     #datos = cursor.fetchall()
-    for (ID, Nombre, Especificaciones, Cantidad, Precio) in cursor:
-        mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
+    for (ID, Nombre, Especificaciones, Cantidad, Unidad, Precio) in cursor:
+        mydata.append([ID, Nombre, Especificaciones, Cantidad, Unidad, Precio])
 
     cnx.commit()
     cnx.close()
@@ -72,7 +72,7 @@ def desplegar_lista_inventario_letra(letter):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        query = ('SELECT * FROM inventario WHERE  Nombre_Producto LIKE %s"%";')
+        query = ('SELECT * FROM Inventario WHERE  Nombre_Producto LIKE %s"%";')
         cursor.execute(query, (letter,))
         datos = cursor.fetchall()
         #print(datos)
@@ -87,8 +87,8 @@ def desplegar_lista_inventario_letra(letter):
         return ("No fue posible filtrar la lista por letra", False)
 
     mydata = []
-    for (ID, Nombre, Especificaciones, Cantidad, Precio) in datos:
-        mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
+    for (ID, Nombre, Especificaciones, Cantidad, Unidad, Precio) in datos:
+        mydata.append([ID, Nombre, Especificaciones, Cantidad, Unidad, Precio])
 
     cnx.commit()
     cnx.close()
@@ -102,7 +102,7 @@ def buscar_articulo_nombre(word):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        query = ("SELECT * FROM inventario WHERE Nombre_Producto = %s;")
+        query = ("SELECT * FROM Inventario WHERE Nombre_Producto = %s;")
         cursor.execute(query,(word,))
         #datos = cursor.fetchone()
     except mysql.connector.Error as err:
@@ -116,8 +116,8 @@ def buscar_articulo_nombre(word):
         return ("No fue posible hacer la búsqueda por nombre", False)
 
     mydata = []
-    for (ID, Nombre, Especificaciones, Cantidad, Precio) in cursor:
-        mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
+    for (ID, Nombre, Especificaciones, Cantidad, Unidad, Precio) in cursor:
+        mydata.append([ID, Nombre, Especificaciones, Cantidad, Unidad, Precio])
 
     cnx.commit()
     cnx.close()
@@ -139,7 +139,7 @@ def busqueda_por_codigo(code):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        query = ("SELECT * FROM inventario WHERE ID_Producto = %s;")
+        query = ("SELECT * FROM Inventario WHERE ID_Producto = %s;")
         cursor.execute(query,(code,))
         #datos = cursor.fetchone()
 
@@ -155,8 +155,8 @@ def busqueda_por_codigo(code):
         return ("No fue posible hacer la búsqueda por código", False)
 
     mydata = []
-    for (ID, Nombre, Especificaciones, Cantidad, Precio) in cursor:
-        mydata.append([ID, Nombre, Especificaciones, Cantidad, Precio])
+    for (ID, Nombre, Especificaciones, Cantidad, Unidad, Precio) in cursor:
+        mydata.append([ID, Nombre, Especificaciones, Cantidad, Unidad, Precio])
 
     cnx.commit()
     cnx.close()
@@ -176,7 +176,7 @@ def eliminar_por_codigo(code):
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
         #DELETE FROM PE_Empleado WHERE Sueldo >= 10000;
-        query = ("DELETE FROM inventario WHERE ID_Producto = %s;")
+        query = ("DELETE FROM Inventario WHERE ID_Producto = %s;")
         cursor.execute(query,(code,))
         #datos = cursor.fetchone()
     except mysql.connector.Error as err:
@@ -196,13 +196,13 @@ def eliminar_por_codigo(code):
 """
 FUNCION: AÑADIR PRODUCTO AL INVENTARIO
 """
-def add_producto(code, name, specifications, quantity, price):
+def add_producto(code, name, specifications, quantity, unity, price):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        data_query = (code, name, specifications, quantity, price)
+        data_query = (code, name, specifications, quantity, unity, price)
         #INSERT INTO ex2_Asignatura (Clave, Nombre, Semestre, Creditos, Clave_Plan, Tipo) VALUES ('0117','Pensamiento del ambiente','0',6,'1800', 'Optativa');
-        query = ("INSERT INTO inventario (ID_Producto, Nombre_Producto, Especificaciones_Producto, Cantidad_Producto, Precio_Producto) VALUES (%s, %s, %s, %s, %s);")
+        query = ("INSERT INTO Inventario (ID_Producto, Nombre_Producto, Especificaciones_Producto, Cantidad_Producto,  Unidad_Producto, Precio_Producto) VALUES (%s, %s, %s, %s, %s, %s);")
         cursor.execute(query, data_query)
         #datos = cursor.fetchone()
     except mysql.connector.Error as err:
@@ -222,10 +222,13 @@ def add_producto(code, name, specifications, quantity, price):
 """
 FUNCION: MODIFICAR PRODUCTO DEL INVENTARIO
 """
+# LA DEJAMOS PENDIENTE
 #UPDATE tabla SET columna = valor [WHERE condiciones];
-def update_producto(code, name, specifications, quantity, price):
+def update_producto(code, name, specifications, quantity, unity, price):
     # Haremos algunas manipulaciones en los datos para formar la query & data_query
-    columnas_query = {"Nombre_Producto": name, "Especificaciones_Producto": specifications, "Cantidad_Producto": quantity, "Precio_Producto": price}
+    columnas_query = {"Nombre_Producto": name, "Especificaciones_Producto": specifications,
+     "Cantidad_Producto": quantity, "Unidad_Producto": unity, "Precio_Producto": price}
+
     values = columnas_query.values() #Obtenemos los valores de cada clave
     values = list(values)
     print("VALORES:", values)
@@ -233,12 +236,14 @@ def update_producto(code, name, specifications, quantity, price):
     print("Cabmios:", changes)
     if changes == 3:
         # Si hay tres valores con cero significa que solo es una columna en la query
-        for value in values:
-            key_by_value = list(columnas_query.keys())[list(columnas_query.values()).index(value)]
-            print(key_by_value)
-            if  key_by_value != '':
+        for key, value in columnas_query.items():
+            #key_by_value = list(columnas_query.keys())[list(columnas_query.values()).index(value)]
+            #print(key_by_value)
+            if  value != '':
                 #my_query = "UPDATE inventario SET %s = %s WHERE ID_Producto = %s;"
-                data_query = (key_by_value, value, code)
+                print(key, value, code)
+                data_query = (key, str(value), code)
+                break
 
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
@@ -246,6 +251,7 @@ def update_producto(code, name, specifications, quantity, price):
         print("mis datos consulta: ", data_query)
         query = ("UPDATE inventario SET %s = %s WHERE ID_Producto = %s;")
         cursor.execute(query, data_query)
+        cursor.execute(my_query)
         #datos = cursor.fetchone()
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:

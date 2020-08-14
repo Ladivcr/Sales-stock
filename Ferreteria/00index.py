@@ -50,6 +50,7 @@ def Inventario():
     import functions
     # Función para desplegar la lista de inventario
     mydata, state = functions.desplegar_lista_inventario()
+    print("mydata en Inventario", mydata)
     if state == True:
         return (render_template("Inventario.html", productos = mydata))
     if state == False:
@@ -143,8 +144,10 @@ def Administrar():
                 name = name.lower()
                 specifications = request.form['product_specifications']
                 quantity = request.form['product_quantity']
+                unity = request.form['product_unity']
                 price = request.form['product_price']
-                mydata, state = functions.add_producto(code, name, specifications, quantity, price)
+
+                mydata, state = functions.add_producto(code, name, specifications, quantity, unity, price)
                 if state == True:
                     #print(len(mydata[0]))
                     message = "Producto Añadido Correctamente"
@@ -174,14 +177,16 @@ def Administrar():
                 #return (render_template("InventarioActualizar.html", error = message, producto = mydata, longitud = len(mydata[0])))
 
         elif operation == 'update':
+            # La dejamos pendiente
             try:
                 name = request.form['product_name']
                 name = name.lower()
                 specifications = request.form['product_specifications']
                 quantity = request.form['product_quantity']
+                unity = request.form['product_unity']
                 price = request.form['product_price']
 
-                mydata, state = functions.update_producto(code, name, specifications, quantity, price)
+                mydata, state = functions.update_producto(code, name, specifications, quantity, unity, price)
                 if state == False:
                     error = str(mydata)
                     message = ("{0}".format(mydata))
