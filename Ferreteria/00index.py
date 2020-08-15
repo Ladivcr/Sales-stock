@@ -26,16 +26,23 @@ def index():
     return (render_template("index.html"))
 
 
-########################################################################
+##############################################################################
 """
 Apartado: REALIZAR VENTAS
 """
-@app.route("/Realizar-Venta")
+@app.route("/Realizar-Venta", methods = ['POST'])
 def RealizarVenta():
-    return (render_template("RealizarVenta.html"))
+    return (render_template("RealizarVenta.html", pago = 0))
 
 
-########################################################################
+@app.route("/RealizarVenta/AddToCar")
+def AddToCar():
+    try:
+        pass
+    except:
+        pass
+
+##############################################################################
 """
 Apartado: INVENTARIO
 """
@@ -55,7 +62,7 @@ def Inventario():
     else:
         return ("<h1>¡Ups! Parece que este error en Inventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
-#---FUNCION PARA *FILTRAR* LA LISTA DE ARTICULOS EN EL INVENTARIO------
+#---FUNCION PARA *FILTRAR* LA LISTA DE ARTICULOS EN EL INVENTARIO------------#
 @app.route("/Inventario/FilterInventario", methods = ['POST'])
 def FilterInventario():
     import functions
@@ -73,7 +80,7 @@ def FilterInventario():
     else:
         return ("<h1>¡Ups! Parece que este error en FilterInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
-#---FUNCION PARA *BUSCAR* ARTICULOS POR NOMBRE EN EL INVENTARIO------
+#---FUNCION PARA *BUSCAR* ARTICULOS POR NOMBRE EN EL INVENTARIO--------------#
 @app.route("/Inventario/SearchInventario", methods = ['POST'])
 def SearchInventario():
     import functions
@@ -91,7 +98,7 @@ def SearchInventario():
     else:
         return("<h1>¡Ups! Parece que este error en SearchInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
-##########################################################################
+##############################################################################
 """
 Apartado: Actualizar El Inventario
 """
@@ -111,7 +118,7 @@ def Administrar():
     try:
         search_by_code = request.form['search']
         search_by_code = str(search_by_code)
-        #-------------BUSQUEDA POR CODIGO---------------
+        #-------------BUSQUEDA POR CODIGO------------------------------------#
         if search_by_code == 'SearchCode':
 
             mydata, state = functions.busqueda_por_codigo(code)
@@ -131,7 +138,7 @@ def Administrar():
             message = "off-Debes elegir la operación que deseas realizar"
             return (render_template("InventarioActualizar.html", error = message, longitud = 0))
 
-        #-----------------OPERACION AÑADIR-----------------------
+        #-----------------OPERACION AÑADIR-----------------------------------#
         elif operation == 'add':
             try:
                 name = request.form['product_name']
@@ -154,7 +161,7 @@ def Administrar():
                 message = "add-Debes introducir todos los valores del producto"
                 return (render_template("InventarioActualizar.html", error = message, longitud = 0))
 
-        #--------OPERACION ELIMINAR----------------
+        #--------OPERACION ELIMINAR------------------------------------------#
         elif operation == 'delete':
             # Para eliminar basta con introducir el código del producto
             mydata, state = functions.eliminar_por_codigo(code)
@@ -192,7 +199,7 @@ def Administrar():
             except:
                 return ("<h1>¡ups! Este error no lo vi-update</h1>")
 
-########################################################################
+##############################################################################
 """
 Apartado: Contacto
 """
@@ -202,7 +209,7 @@ def Contacto():
 
 
 
-# Función principal
+######################### FUNCION PRINCIPAL ##################################
 if __name__ == "__main__":
     # Ejecutamos el objeto
     #webbrowser.open_new_tab('http://127.0.0.1:5000/')

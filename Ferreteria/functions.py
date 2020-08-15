@@ -34,7 +34,7 @@ nameDB = credentials["credentials"][0]["database"]
 ###############################
 """
 
-
+##############################################################################
 """
 Función: DESPLEGAR LOS PRODUCTOS DEL INVENTARIO
 """
@@ -64,7 +64,7 @@ def desplegar_lista_inventario():
     cnx.close()
     return (mydata, True)
 
-
+##############################################################################
 """
 Función: DESPLEGAR LOS PRODUCTOS POR LETRA
 """
@@ -95,6 +95,7 @@ def desplegar_lista_inventario_letra(letter):
     #print(mydata)
     return (mydata, True)
 
+##############################################################################
 """
 FUNCION: BUSCAR POR NOMBRE
 """
@@ -124,14 +125,14 @@ def buscar_articulo_nombre(word):
     print(mydata)
     return (mydata, True)
 
-
+##############################################################################
 """
 #############################################################
 Las siguiente funciones serán para realizar las operaciones #
 elementales: Añadir, Modificar y Eliminar####################
 #########################################
 """
-
+##############################################################################
 """
 FUNCION: BUSQUEDA MEDIANTE CODIGO
 """
@@ -167,7 +168,7 @@ def busqueda_por_codigo(code):
         #print("mydata:", mydata)
         return (mydata, True)
 
-
+##############################################################################
 """
 FUNCION: ELIMINAR PRODUCTO DEL INVENTARIO
 """
@@ -193,6 +194,7 @@ def eliminar_por_codigo(code):
     cnx.close()
     return ("Producto eliminado correctamente", True)
 
+##############################################################################
 """
 FUNCION: AÑADIR PRODUCTO AL INVENTARIO
 """
@@ -219,10 +221,11 @@ def add_producto(code, name, specifications, quantity, unity, price):
     cnx.close()
     return ("Producto añadido correctamente", True)
 
+##############################################################################
 """
 FUNCION: MODIFICAR PRODUCTO DEL INVENTARIO
 """
-# --------------------LA DEJAMOS PENDIENTE-----------------
+# --------------------LA DEJAMOS PENDIENTE-----------------------------------#
 
 
 #UPDATE tabla SET columna = valor [WHERE condiciones];
@@ -268,3 +271,5 @@ def update_producto(code, name, specifications, quantity, unity, price):
     cnx.commit()
     cnx.close()
     return ("Producto actualizado correctamente", True)
+
+##############################################################################

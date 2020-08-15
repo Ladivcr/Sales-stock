@@ -7,14 +7,25 @@
 
 {% block content %}
 
+{% if pago > 0 %}
+  {% set code = producto[0][0] %}
+{% else %}
+  {% set code = 0 %}
+{% endif %}
+
+<nav class = "carritoRealizarVenta" action="/" method="post">
+  <ul id="horizontal">
+  <li><a><p><b>Carrito de compras: {{ code }} $</b></P></a></li>
+  </ul>
+</nav>
+
 <!-- MENSAJE DE ADVERTENCIA PARA EL USUARIO -->
 {% if error %}
 <!-- <center><h1>{{ error }}</h1></center> -->
 <script type="text/javascript">alert("{{ error }}")</script>
 {% endif %}
 
-
-<form action="/RealizarVenta/#" method="post">
+<form action="/RealizarVenta/AddToCar" method="post">
 
  <ul>
   <li>
@@ -44,23 +55,19 @@
   </select>
 </li>
 
-<li>
-  <label for="date">Fecha de venta:</label>
-  <input type="date" id="datee" name="sale_date">
-</li>
+
 
   <li>
-    <label for="price">Total a pagar:</label>
+    <label for="price">Precio por el producto:</label>
     <input type="number" id="price" name="sale_price" step="any" placeholder="¿Cuánto es de este producto?">
   </li>
  </ul>
  <br>
   <center><button class="btn_carrito" name="btn_carrito" value = "addCar" type="submit">Añadir al carrito</button></center>
-  <br>
-   <center><button class="btn_venta" name="btn_venta" value = "doSale" type="submit"><b>Efectuar venta</b></button></center>
+  <center><p>*<b>Buscar atributos mediante su código:</b> tiene como objetivo facilitar el llenado de los atributos:
+     Nombre, Cantidad Y Unidad.<br>Solo introduzca el código del producto y presione buscar.</p></center>
 </form>
-<center><p>*<b>Buscar atributos mediante su código:</b> tiene como objetivo facilitar el llenado de los atributos:
-   Nombre, Cantidad Y Unidad.<br>Solo introduzca el código del producto y presione buscar.</p></center>
+
 
 
 {% endblock %}
