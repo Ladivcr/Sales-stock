@@ -8,23 +8,20 @@
 
 {% block content %}
 
-      <form  class = "menuINDEX" action="/" method="post">
-        <ul id="horizontal">
-        <li><a><input name="searching" type="search"  placeholder="Nombre completo del producto" required></a></li>
-        <li><a><button type="submit">Buscar producto</button></a></li>
-
-        </ul>
-      </form>
-
+<!-- MENSAJE DE ADVERTENCIA PARA EL USUARIO -->
+{% if error %}
+<!-- <center><h1>{{ error }}</h1></center> -->
+<script type="text/javascript">alert("{{ error }}")</script>
+{% endif %}
 
     <div id = "main-container">
       <table>
         <thead>
           <tr>
-            <th scope="col">Codigo de venta</th>
-            <th scope="col">Nombre del producto</th>
-            <th scope="col">Cantidad vendida</th>
-            <th scope="col">Unidad</th>
+            <th scope="col">Códigos de productos</th>
+            <th scope="col">Nombre de los productos</th>
+            <th scope="col">Cantidad vendida c/u</th>
+            <th scope="col">Unidad c/u</th>
             <th scope="col">Fecha</th>
             <th scope="col">Total</th>
           </tr>
@@ -75,11 +72,7 @@
           </select>
         <button type="submit" name="submit_button" value="Mostrar">Filtrar</button>
 
-        <!-- MENSAJE DE ADVERTENCIA PARA EL USUARIO -->
-        {% if error %}
-        <!-- <center><h1>{{ error }}</h1></center> -->
-        <script type="text/javascript">alert("{{ error }}")</script>
-        {% endif %}
+
         </form>
 
 {% endblock %}

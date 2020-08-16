@@ -12,12 +12,14 @@
   {% set name = producto[0][1] %}
   {% set quantity = producto[0][2] %}
   {% set unity = producto[0][3] %}
+  {% set price = producto[0][4] %}
 
 {% else %}
   {% set code = " " %}
   {% set name = " " %}
   {% set quantity = " " %}
   {% set unity = " " %}
+  {% set price = " " %}
 
 {% endif %}
 
@@ -26,7 +28,7 @@
 {% else %}
   {% set totalPrice = 0 %}
 {% endif %}
-<nav class = "carritoRealizarVenta" action="/" method="post">
+<nav class = "carritoRealizarVenta"  method="post">
   <ul id="horizontal">
   <li><a><p><b>Carrito de compras: {{ totalPrice }} $</b></P></a></li>
   </ul>
@@ -38,7 +40,7 @@
 <script type="text/javascript">alert("{{ error }}")</script>
 {% endif %}
 
-<form action="/Realizar-Venta/AddToCar" method="post">
+<form action="/Realizar-Venta/ControlVenta" method="post">
 
  <ul>
   <li>
@@ -72,7 +74,7 @@
 
   <li>
     <label for="price">Precio por el producto:</label>
-    <input type="number" id="price" name="sale_price" step="any" placeholder="¿Cuánto es de este producto?" value="d">
+    <input type="number" id="price" name="sale_price" step="any" placeholder="{{ price }}" value="d">
   </li>
  </ul>
  <br>

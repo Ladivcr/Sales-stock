@@ -8,9 +8,7 @@ About: Work in back-end for the control of web page
 """
 
 # Importamos la librería
-from flask import Flask, render_template,request,session,g,redirect,url_for,flash
 import json
-import webbrowser
 import mysql.connector
 from mysql.connector import errorcode
 
@@ -34,7 +32,7 @@ nameDB = credentials["credentials"][0]["database"]
 ###############################
 """
 
-##############################################################################
+###############################################################################
 """
 Función: DESPLEGAR LOS PRODUCTOS DEL INVENTARIO
 """
@@ -64,7 +62,7 @@ def desplegar_lista_inventario():
     cnx.close()
     return (mydata, True)
 
-##############################################################################
+###############################################################################
 """
 Función: DESPLEGAR LOS PRODUCTOS POR LETRA
 """
@@ -95,7 +93,7 @@ def desplegar_lista_inventario_letra(letter):
     #print(mydata)
     return (mydata, True)
 
-##############################################################################
+###############################################################################
 """
 FUNCION: BUSCAR POR NOMBRE
 """
@@ -125,14 +123,14 @@ def buscar_articulo_nombre(word):
     print(mydata)
     return (mydata, True)
 
-##############################################################################
+###############################################################################
 """
 #############################################################
 Las siguiente funciones serán para realizar las operaciones #
 elementales: Añadir, Modificar y Eliminar####################
 #########################################
 """
-##############################################################################
+###############################################################################
 """
 FUNCION: BUSQUEDA MEDIANTE CODIGO
 """
@@ -168,7 +166,7 @@ def busqueda_por_codigo(code):
         #print("mydata:", mydata)
         return (mydata, True)
 
-##############################################################################
+###############################################################################
 """
 FUNCION: ELIMINAR PRODUCTO DEL INVENTARIO
 """
@@ -194,7 +192,7 @@ def eliminar_por_codigo(code):
     cnx.close()
     return ("Producto eliminado correctamente", True)
 
-##############################################################################
+###############################################################################
 """
 FUNCION: AÑADIR PRODUCTO AL INVENTARIO
 """
@@ -221,7 +219,7 @@ def add_producto(code, name, specifications, quantity, unity, price):
     cnx.close()
     return ("Producto añadido correctamente", True)
 
-##############################################################################
+###############################################################################
 """
 FUNCION: MODIFICAR PRODUCTO DEL INVENTARIO
 """
@@ -272,80 +270,110 @@ def update_producto(code, name, specifications, quantity, unity, price):
     cnx.close()
     return ("Producto actualizado correctamente", True)
 
-##############################################################################
-
+###############################################################################
+"""
+##################################################################
+Las siguiente funciones serán para llevar el control de la venta #
+a realizar de x productos ########################################
+##########################
+"""
+###############################################################################
 """
 FUNCION: RELLENAR PARAMETROS EN VENTA
 """
-def add_fast(code):
+def add_fast_parameters(code):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        query = ("SELECT ID_Producto, Nombre_Producto, Cantidad_Producto, Unidad_Producto FROM Inventario WHERE ID_Producto = %s;")
+        query = ("SELECT ID_Producto, Nombre_Producto, Cantidad_Producto, Unidad_Producto, Precio_Producto  FROM Inventario WHERE ID_Producto = %s;")
         cursor.execute(query,(code,))
-        try:
-            query2 = ("SELECT SUM(Precio_Total) FROM Carrito;")
-            cursor2.execute(query2)
-            total = 0
-            for value in cursor2:
-                print(value)
-                total = float(value[0])
-        except:
-            total = 0
+        #datos = cursor.fetchone()
 
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            return ("Something is wrong with your user name or passwordBPC", False, total == 0)
+            return ("Something is wrong with your user name or passwordBPC", False)
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            return ("Database does not existBPC", False, total == 0)
+            return ("Database does not existBPC", False)
         else:
-            return (err, False, total == 0)
+            return (err, False)
 
-        return ("No fue posible hacer la búsqueda por código", False, total == 0)
+        return ("No fue posible añadir los parámetros por código", False)
 
     mydata = []
-    for (ID, Nombre, Cantidad, Unidad) in cursor:
-        mydata.append([ID, Nombre, Cantidad, Unidad])
-
+    for (ID, Nombre, Cantidad, Unidad, Precio) in cursor:
+        mydata.append([ID, Nombre, Cantidad, Unidad, Precio])
 
     cnx.commit()
     cnx.close()
 
     if len(mydata) == 0:
-        return("No se encontro un producto con ese código", False, total)
+        return("No se encontro un producto con ese código", False)
     else:
-        return (mydata, True, total)
+        #print("mydata:", mydata)
+        return (mydata, True)
+    pass
 
+###############################################################################
 """
 FUNCION: PARA AÑADIR AL CARRITO
 """
 def add_to_car(code, name, quantity, unity, price):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
-        cursor = cnx.cursor(); cursor2 = cnx.cursor()
+        cursor = cnx.cursor()
         data_query = (code, name, quantity, unity, price)
         #INSERT INTO ex2_Asignatura (Clave, Nombre, Semestre, Creditos, Clave_Plan, Tipo) VALUES ('0117','Pensamiento del ambiente','0',6,'1800', 'Optativa');
         query = ("INSERT INTO Carrito (ID_Producto, Nombre_Producto, Cantidad,  Unidad, Precio_Total) VALUES (%s, %s, %s, %s, %s);")
         cursor.execute(query, data_query)
-        try:
-            query2 = ("SELECT SUM(Precio_Total) FROM Carrito;")
-            cursor2.execute(query2)
-            total = 0
-            for value in cursor2:
-                total = float(value[0])
-        except:
-            total = 0
-
+        #datos = cursor.fetchone()
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            return ("Something is wrong with your user name or passwordAP", False, total == 0)
+            return ("Something is wrong with your user name or passwordAP", False)
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            return ("Database does not existAP", False, total == 0)
+            return ("Database does not existAP", False)
         else:
-            return (err, False, total == 0)
+            return (err, False)
 
-        return ("No fue posible añadir el producto al carrito", False, total == 0)
+        return ("No fue posible añadir el producto al carrito", False)
 
     cnx.commit()
     cnx.close()
-    return ("Producto añadido al carrito correctamente", True, total)
+    return ("Producto añadido al carrito correctamente", True)
+
+###############################################################################
+"""
+FUNCION: PARA LLEVAR LA CUENTA DE LA VENTA A REALIZAR
+"""
+def total_sale():
+    try:
+        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        cursor = cnx.cursor()
+        try:
+            query = ("SELECT SUM(Precio_Total) FROM Carrito;")
+            cursor.execute(query)
+            #datos = cursor.fetchone()
+            total = 0
+            for value in cursor:
+                #print("el valor", value)
+                total = float(value[0])
+
+            cnx.commit()
+            cnx.close()
+            return (total, True)
+        except:
+            #print("entre!")
+            total = 0
+            cnx.commit()
+            cnx.close()
+            return (total, True)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return (-1, False)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return (-2, False)
+        else:
+            return (-3, False)
+
+        return (-4, False)
+
+###############################################################################

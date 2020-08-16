@@ -8,6 +8,7 @@ About: Work in back-end for the control of web page
 """
 # Importamos la librería
 from flask import Flask, render_template, request, flash, redirect, url_for
+#from flask import Flask, render_template,request,session,g,redirect,url_for,flash
 import webbrowser
 
 # Creamos el objeto de flask que nos servira para lanzar el servidor
@@ -32,11 +33,18 @@ Apartado: REALIZAR VENTAS
 """
 @app.route("/Realizar-Venta")
 def RealizarVenta():
-    return (render_template("RealizarVenta.html", longitud = 0, precioTotal = 0))
+    import functions
+    total, state_query = functions.total_sale()
+    #print("EL TOTAL: {0} Y EL ESTADO: {1}".format(total, state_query))
+    if state_query == False:
+        message = "Algo a fallado a la hora de realizar la suma"
+        return (render_template("RealizarVenta.html", longitud = 0, precioTotal = total, error = message))
+    else:
+        return (render_template("RealizarVenta.html", longitud = 0, precioTotal = total))
 
 
-@app.route("/Realizar-Venta/AddToCar", methods = ['POST'])
-def AddToCar():
+@app.route("/Realizar-Venta/ControlVenta", methods = ['POST'])
+def ControlVenta():
     import functions
     code = request.form['product_code']
     try:
@@ -45,40 +53,63 @@ def AddToCar():
         #-------------AÑADIR ATRIBUTOS POR CODIGO------------------------------------#
         if add_by_code == "AddCode":
             try:
-                mydata, state, total = functions.add_fast(code)
-                if state == True:
+                mydata, state = functions.add_fast_parameters(code)
+                total, state_query = functions.total_sale()
+                #print("MIS DATOS: {0} - SU ESTADO: {1}\nMY QUERY: {2} - SU ESTADO: {3}".format(mydata, state, total, state_query))
+                if state == True and state_query == True:
                     return (render_template("RealizarVenta.html", producto = mydata, longitud = len(mydata[0]), precioTotal = total))
-                elif state == False:
+                elif state == False :
                     error = str(mydata)
                     message = ("{0}".format(mydata))
+                    #message = "Hubo un error en alguna de las dos funciones, revisalo"
                     return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
             except:
-                return("<h1> ¡Ups! Parece que este error en ADMINISTRAR no lo vio el administrador</h1>")
+                return("<h1> ¡Ups! Parece que este error en CONTROLVENTA no lo vio el administrador</h1>")
+        else:
+            return("<h1>¡Hiuston, tenemos un problema, el valor del botón adding no es correcto!</h1>")
 
     except:
         try:
-            carrito = request.form['btn_carrito']
-            if carrito == 'addCar':
-                name = request.form['product_name']
-                name = name.lower()
-                quantity = request.form['product_quantity']
-                unity = request.form['product_unity']
-                price = request.form['sale_price']
+            add_carrito = request.form['btn_carrito']
+            add_carrito = str(add_carrito)
+            #-------------------AÑADIR EL PRODUCTO AL CARRITO DE COMPRAS-----------------#
+            if add_carrito == "addCar":
 
-                if name == "d" or quantity == "d" or unity == "d" or price == "d":
-                    message = "Por favor introduzca todos los datos"
-                    return (render_template("RealizarVenta.html", error = message, longitud = 0, total =0))
-                else:
-                    mydata, state, total = functions.add_to_car(code, name, quantity, unity, price)
-                    if state == True:
-                        return (render_template("RealizarVenta.html", producto = mydata, longitud = len(mydata[0]), precioTotal = total))
-                    elif state == False:
-                        error = str(mydata)
-                        message = ("{0}".format(mydata))
-                        return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                try:
+                    name = request.form['product_name']
+                    quantity = request.form['product_quantity']
+                    unity = request.form['product_unity']
+                    price_sale = request.form['sale_price']
+
+                    if name == "d" or quantity == "d" or unity == "d" or price_sale == "d" or name == " " or quantity == " " or unity == " " or price_sale == " ":
+                        total, state_query = functions.total_sale()
+                        if state_query == True:
+                            message == "Por favor introduce todos los datos"
+                            return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                        else:
+                            return ("<h1>Vaya, parece que hay un error en state_query y no llenaste todos los campos</h1>")
+
+                    else:
+                        mydata, state = functions.add_to_car(code, name, quantity, unity, price_sale)
+                        total, state_query = functions.total_sale()
+                        #print("MIS DATOS PAL CARRO: {0} - SU ESTADO: {1}\nMY QUERY: {2} - SU ESTADO: {3}".format(mydata, state, total, state_query))
+                        if state == True and state_query == True:
+                            error = str(mydata)
+                            message = ("{0}".format(mydata))
+                            #message = "Producto añadido al carrito correctamente"
+                            return (render_template("RealizarVenta.html", longitud = 0, precioTotal = total, error = message))
+                        elif state == False :
+                            error = str(mydata)
+                            message = ("{0}".format(mydata))
+                            return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                except:
+                    # Debo de controlar más este error añadiendo mejor un mensaje
+                    return("<h1> ¡Ups! Parece que este error al AÑADIRALCARRITO no lo vio el administrador</h1>")
+            else:
+                return("<h1>¡Hiuston, tenemos un problema, el valor del botón carrito no es correcto!</h1>")
 
         except:
-            return("<h1>sad</h1>")
+            return("<h1> We're working a lot but we have an error :( in request btn_carrito</h1>")
 
 
 ##############################################################################
