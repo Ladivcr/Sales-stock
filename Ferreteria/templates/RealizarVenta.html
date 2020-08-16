@@ -7,15 +7,28 @@
 
 {% block content %}
 
-{% if pago > 0 %}
+{% if longitud|int() > 0 %}
   {% set code = producto[0][0] %}
+  {% set name = producto[0][1] %}
+  {% set quantity = producto[0][2] %}
+  {% set unity = producto[0][3] %}
+
 {% else %}
-  {% set code = 0 %}
+  {% set code = " " %}
+  {% set name = " " %}
+  {% set quantity = " " %}
+  {% set unity = " " %}
+
 {% endif %}
 
+{% if precioTotal > 0 %}
+  {% set totalPrice = precioTotal %}
+{% else %}
+  {% set totalPrice = 0 %}
+{% endif %}
 <nav class = "carritoRealizarVenta" action="/" method="post">
   <ul id="horizontal">
-  <li><a><p><b>Carrito de compras: {{ code }} $</b></P></a></li>
+  <li><a><p><b>Carrito de compras: {{ totalPrice }} $</b></P></a></li>
   </ul>
 </nav>
 
@@ -25,29 +38,29 @@
 <script type="text/javascript">alert("{{ error }}")</script>
 {% endif %}
 
-<form action="/RealizarVenta/AddToCar" method="post">
+<form action="/Realizar-Venta/AddToCar" method="post">
 
  <ul>
   <li>
     <label for="code">Código del producto:</label>
-    <input type="text" id="code" name="product_code" placeholder="Introduce el código del producto" required>
-    <center><button class="btn_search" name="search" type="submit" value="SearchCode">Buscar atributos mediante su código</button></center>
+    <input type="text" id="code" name="product_code" placeholder="{{ code }}" required>
+    <center><button class="btn_search" name="adding" type="submit" value="AddCode">Añadir atributos mediante su código</button></center>
   </li>
 
   <li>
     <label for="name">Nombre del producto:</label>
-    <input type="text" id="name" name="product_name"  placeholder="Introduce el nombre del producto">
+    <input type="text" id="name" name="product_name"  placeholder="{{ name }}" value="d">
   </li>
 
   <li>
     <label for="quantity">Cantidad:</label>
-    <input type="number" id="quantity" name="product_quantity" step="any" placeholder="Introduce la cantidad de venta">
+    <input type="number" id="quantity" name="product_quantity" step="any" placeholder="{{ quantity }}" value="d">
   </li>
 
   <li>
-    <label for="unity">Unidad:</label>
+    <label for="unity">Unidad: {{ unity }}</label>
     <select name="product_unity" class="list">
-    <option  selected="" value="off"><p lang="es">Escoge la unidad del producto </p></option>
+    <option  selected="" value="d"><p lang="es">Escoge la unidad del producto </p></option>
     <option value="Kg">Kilogramo</option>
     <option value="L">Litro</option>
     <option value="M">Metro</option>
@@ -59,15 +72,17 @@
 
   <li>
     <label for="price">Precio por el producto:</label>
-    <input type="number" id="price" name="sale_price" step="any" placeholder="¿Cuánto es de este producto?">
+    <input type="number" id="price" name="sale_price" step="any" placeholder="¿Cuánto es de este producto?" value="d">
   </li>
  </ul>
  <br>
   <center><button class="btn_carrito" name="btn_carrito" value = "addCar" type="submit">Añadir al carrito</button></center>
-  <center><p>*<b>Buscar atributos mediante su código:</b> tiene como objetivo facilitar el llenado de los atributos:
-     Nombre, Cantidad Y Unidad.<br>Solo introduzca el código del producto y presione buscar.</p></center>
+  <p>¿Ya añadiste todos los productos al carrito? Presiona <b>"efectuar venta".</b></p>
+  <center><button class="btn_venta" name="btn_venta" value = "doSale" type="submit"><b>Efectuar venta</b></button></center>
 </form>
-
+<br>
+<center><p>*<b>Añadir atributos mediante su código:</b> tiene como objetivo facilitar el llenado de los atributos:
+   Nombre, Cantidad Y Unidad.<br>Solo introduzca el código del producto y presione buscar.</p></center>
 
 
 {% endblock %}

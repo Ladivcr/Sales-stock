@@ -5,6 +5,15 @@
   display: flex;
   background-color: #4E94AB;
 }
+
+
+
+.btn_venta {
+    padding: 10px 20px;
+    background-color: #01DF01;
+    color: black;
+}
+
 /*
 .menuINVENTARIO li {
   flex-grow: 1;

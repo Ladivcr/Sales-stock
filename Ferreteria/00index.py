@@ -30,17 +30,56 @@ def index():
 """
 Apartado: REALIZAR VENTAS
 """
-@app.route("/Realizar-Venta", methods = ['POST'])
+@app.route("/Realizar-Venta")
 def RealizarVenta():
-    return (render_template("RealizarVenta.html", pago = 0))
+    return (render_template("RealizarVenta.html", longitud = 0, precioTotal = 0))
 
 
-@app.route("/RealizarVenta/AddToCar")
+@app.route("/Realizar-Venta/AddToCar", methods = ['POST'])
 def AddToCar():
+    import functions
+    code = request.form['product_code']
     try:
-        pass
+        add_by_code = request.form['adding']
+        add_by_code = str(add_by_code)
+        #-------------AÑADIR ATRIBUTOS POR CODIGO------------------------------------#
+        if add_by_code == "AddCode":
+            try:
+                mydata, state, total = functions.add_fast(code)
+                if state == True:
+                    return (render_template("RealizarVenta.html", producto = mydata, longitud = len(mydata[0]), precioTotal = total))
+                elif state == False:
+                    error = str(mydata)
+                    message = ("{0}".format(mydata))
+                    return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+            except:
+                return("<h1> ¡Ups! Parece que este error en ADMINISTRAR no lo vio el administrador</h1>")
+
     except:
-        pass
+        try:
+            carrito = request.form['btn_carrito']
+            if carrito == 'addCar':
+                name = request.form['product_name']
+                name = name.lower()
+                quantity = request.form['product_quantity']
+                unity = request.form['product_unity']
+                price = request.form['sale_price']
+
+                if name == "d" or quantity == "d" or unity == "d" or price == "d":
+                    message = "Por favor introduzca todos los datos"
+                    return (render_template("RealizarVenta.html", error = message, longitud = 0, total =0))
+                else:
+                    mydata, state, total = functions.add_to_car(code, name, quantity, unity, price)
+                    if state == True:
+                        return (render_template("RealizarVenta.html", producto = mydata, longitud = len(mydata[0]), precioTotal = total))
+                    elif state == False:
+                        error = str(mydata)
+                        message = ("{0}".format(mydata))
+                        return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+
+        except:
+            return("<h1>sad</h1>")
+
 
 ##############################################################################
 """
@@ -51,7 +90,7 @@ def Inventario():
     import functions
     # Función para desplegar la lista de inventario
     mydata, state = functions.desplegar_lista_inventario()
-    print("mydata en Inventario", mydata)
+    #print("mydata en Inventario", mydata)
     if state == True:
         return (render_template("Inventario.html", productos = mydata))
     if state == False:
@@ -60,7 +99,7 @@ def Inventario():
         message = ("{0}".format(mydata))
         return (render_template("Inventario.html", error = message, productos = []))
     else:
-        return ("<h1>¡Ups! Parece que este error en Inventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
+        return ("<h1>¡Ups! Parece que este error en INVENTARIO no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
 #---FUNCION PARA *FILTRAR* LA LISTA DE ARTICULOS EN EL INVENTARIO------------#
 @app.route("/Inventario/FilterInventario", methods = ['POST'])
@@ -78,7 +117,7 @@ def FilterInventario():
         message =("{0}".format(mydata))
         return (render_template("Inventario.html", error = message, productos = []))
     else:
-        return ("<h1>¡Ups! Parece que este error en FilterInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
+        return ("<h1>¡Ups! Parece que este error en FILTERINVENTARIO no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
 #---FUNCION PARA *BUSCAR* ARTICULOS POR NOMBRE EN EL INVENTARIO--------------#
 @app.route("/Inventario/SearchInventario", methods = ['POST'])
@@ -96,7 +135,7 @@ def SearchInventario():
         message = ("{0}".format(mydata))
         return (render_template("Inventario.html", error = message, productos = []))
     else:
-        return("<h1>¡Ups! Parece que este error en SearchInventario no lo habíamos contemplado. Por favor contacte al administrador</h1>")
+        return("<h1>¡Ups! Parece que este error en SEARCHINVENTARIO no lo habíamos contemplado. Por favor contacte al administrador</h1>")
 
 ##############################################################################
 """
@@ -130,7 +169,7 @@ def Administrar():
                 message = ("{0}".format(mydata))
                 return (render_template("InventarioActualizar.html", error = message, longitud = 0))
         else:
-            return("<h1> ¡Ups! Parece que este error no lo vio el administrador</h1>")
+            return("<h1> ¡Ups! Parece que este error en ADMINISTRAR no lo vio el administrador</h1>")
 
     except:
         operation = request.form['Operations']

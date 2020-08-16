@@ -144,7 +144,7 @@ def busqueda_por_codigo(code):
         cursor.execute(query,(code,))
         #datos = cursor.fetchone()
 
-        print("dats", cursor)
+        #print("dats", cursor)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             return ("Something is wrong with your user name or passwordBPC", False)
@@ -273,3 +273,79 @@ def update_producto(code, name, specifications, quantity, unity, price):
     return ("Producto actualizado correctamente", True)
 
 ##############################################################################
+
+"""
+FUNCION: RELLENAR PARAMETROS EN VENTA
+"""
+def add_fast(code):
+    try:
+        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        cursor = cnx.cursor()
+        query = ("SELECT ID_Producto, Nombre_Producto, Cantidad_Producto, Unidad_Producto FROM Inventario WHERE ID_Producto = %s;")
+        cursor.execute(query,(code,))
+        try:
+            query2 = ("SELECT SUM(Precio_Total) FROM Carrito;")
+            cursor2.execute(query2)
+            total = 0
+            for value in cursor2:
+                print(value)
+                total = float(value[0])
+        except:
+            total = 0
+
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return ("Something is wrong with your user name or passwordBPC", False, total == 0)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return ("Database does not existBPC", False, total == 0)
+        else:
+            return (err, False, total == 0)
+
+        return ("No fue posible hacer la búsqueda por código", False, total == 0)
+
+    mydata = []
+    for (ID, Nombre, Cantidad, Unidad) in cursor:
+        mydata.append([ID, Nombre, Cantidad, Unidad])
+
+
+    cnx.commit()
+    cnx.close()
+
+    if len(mydata) == 0:
+        return("No se encontro un producto con ese código", False, total)
+    else:
+        return (mydata, True, total)
+
+"""
+FUNCION: PARA AÑADIR AL CARRITO
+"""
+def add_to_car(code, name, quantity, unity, price):
+    try:
+        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        cursor = cnx.cursor(); cursor2 = cnx.cursor()
+        data_query = (code, name, quantity, unity, price)
+        #INSERT INTO ex2_Asignatura (Clave, Nombre, Semestre, Creditos, Clave_Plan, Tipo) VALUES ('0117','Pensamiento del ambiente','0',6,'1800', 'Optativa');
+        query = ("INSERT INTO Carrito (ID_Producto, Nombre_Producto, Cantidad,  Unidad, Precio_Total) VALUES (%s, %s, %s, %s, %s);")
+        cursor.execute(query, data_query)
+        try:
+            query2 = ("SELECT SUM(Precio_Total) FROM Carrito;")
+            cursor2.execute(query2)
+            total = 0
+            for value in cursor2:
+                total = float(value[0])
+        except:
+            total = 0
+
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return ("Something is wrong with your user name or passwordAP", False, total == 0)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return ("Database does not existAP", False, total == 0)
+        else:
+            return (err, False, total == 0)
+
+        return ("No fue posible añadir el producto al carrito", False, total == 0)
+
+    cnx.commit()
+    cnx.close()
+    return ("Producto añadido al carrito correctamente", True, total)
