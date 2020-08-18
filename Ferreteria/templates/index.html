@@ -27,19 +27,19 @@
           </tr>
         </thead>
         <tbody>
-          <!-- {% for value in productos %} -->
+           {% for value in productos %}
           <tr>
-            <td><!-- {{ value[0] }} ---></td>
-            <td><!-- {{ value[0] }} ---></td>
-            <td><!-- {{ value[0] }} ---></td>
-            <td><!-- {{ value[0] }} ---></td>
-            <td><!-- {{ value[0] }} ---></td>
-            <td><!-- {{ value[0] }} ---></td>
+            <td> {{ value[0] }} </td>
+            <td> {{ value[1] }} </td>
+            <td> {{ value[2] }} </td>
+            <td> {{ value[3] }} </td>
+            <td> {{ value[4] }} </td>
+            <td> {{ value[5] }} </td>
           </tr>
-          <!--{% endfor %}-->
+          {% endfor %}
           </table>
         </div>
-
+        <!--
         <form action="/" method="post">
           <select name="valuesLetter" class="list">
             <option value="A">A</option>
@@ -72,7 +72,7 @@
           </select>
         <button type="submit" name="submit_button" value="Mostrar">Filtrar</button>
 
-
         </form>
+      -->
 
 {% endblock %}

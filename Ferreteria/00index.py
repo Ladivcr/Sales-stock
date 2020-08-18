@@ -24,6 +24,19 @@ app.secret_key = "Eladiv"
 @app.route("/")
 # Definimos la función para la ruta de la página principal
 def index():
+    import functions
+    # Función para desplegar la lista de inventario
+    mydata, state = functions.desplegar_lista_index()
+    #print("mydata en Inventario", mydata)
+    if state == True:
+        return (render_template("index.html", productos = mydata))
+    if state == False:
+        #print(mydata)
+        mydata = str(mydata)
+        message = ("{0}".format(mydata))
+        return (render_template("index.html", error = message, productos = []))
+    else:
+        return ("<h1>¡Ups! Parece que este error en INVENTARIO no lo habíamos contemplado. Por favor contacte al administrador</h1>")
     return (render_template("index.html"))
 
 
@@ -78,6 +91,7 @@ def ControlVenta():
                 try:
                     name = request.form['product_name']
                     quantity = request.form['product_quantity']
+                    quantity = float(quantity)
                     unity = request.form['product_unity']
                     price_sale = request.form['sale_price']
 
@@ -103,13 +117,73 @@ def ControlVenta():
                             message = ("{0}".format(mydata))
                             return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
                 except:
-                    # Debo de controlar más este error añadiendo mejor un mensaje
-                    return("<h1> ¡Ups! Parece que este error al AÑADIRALCARRITO no lo vio el administrador</h1>")
+                    total, state_query = functions.total_sale()
+                    #print("mi ttoal es mi estado:{0}{1}".format(total, state_query))
+                    if state_query == True:
+                        #print("ENTREEEEE")
+                        message = "Por favor introduce todos los datos"
+                        return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                    elif state_query == False:
+                        return ("<h1>Vaya, parece que hay un error en state_query y no llenaste todos los campos</h1>")
+                        # Debo de controlar más este error añadiendo mejor un mensaje #¡HECHO!
+                        #return("<h1> ¡Ups! Parece que este error al AÑADIRALCARRITO no lo vio el administrador</h1>")
             else:
-                return("<h1>¡Hiuston, tenemos un problema, el valor del botón carrito no es correcto!</h1>")
+                return("<h1>¡Hiuston tenemos un problema, el valor del botón carrito no es correcto!</h1>")
 
         except:
-            return("<h1> We're working a lot but we have an error :( in request btn_carrito</h1>")
+            try:
+                do_sale = request.form['btn_venta']
+                do_sale = str(do_sale)
+                if do_sale == "doSale":
+                    #efectuamos la venta
+                    #Que basicamente va a ser un select * a la tabla de carrito
+                    #Y tenedre que guardar todo en diferentes arreglos para
+                    #hacer un insert en la tabala de VENTAS
+                    #Aqui no paso valores, sino que espero valores del select y los paso
+                    #a las de venta
+                    aux_id, aux_quantity, Ids, names, quantities, unities, totalPrice, state_query = functions.pre_sale() # Seleccionamos las cosas del carrito
+                    if state_query == True and Ids != 0 and names != 0 and quantities != 0 and unities != 0 and totalPrice != 0:
+                        state_inv = functions.update_inventario(aux_id, aux_quantity)
+                        print(state_inv) #DEBO DE REVISAR LA FUNCIÓN DE ACTUALIZACIÓN
+                        sms, state_query = functions.do_sale(Ids, names, quantities, unities, totalPrice)
+                        if state_query == True and state_inv == True:
+                            state_car = functions.reset_car()
+                            if state_car == True:
+                                message = sms
+                                total, state_q = functions.total_sale()
+                                #print("mi ttoal es mi estado:{0}{1}".format(total, state_query))
+                                if state_q == True:
+                                    return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                                elif state_q == False:
+                                    return ("<h1>Vaya, parece que hay un error en state_q de total_sale que no deberia ocurrir</h1>")
+                            elif state_car == False:
+                                return("<h1>Parece que no fue posible reiniciar el carrito de compras al efectuar la venta</h1>")
+
+                        elif state_query == False or state_inv == False:
+                            total, state_q = functions.total_sale()
+                            if state_q == True:
+                                print("No se actualizo el producto")
+                                return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                            elif state_q == False:
+                                return ("<h1>Vaya, parece que hay un error en state_q de total_sale que no deberia ocurrir</h1>")
+
+                    else:
+                        total, state_query = functions.total_sale()
+                        #print("mi ttoal es mi estado:{0}{1}".format(total, state_query))
+                        if state_query == True:
+                            message = "No hay datos para efectuar la venta o tal vez algo fallo en pre_sale"
+                            return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                        else:
+                            return("<h1> Parece que este error se le paso al administrador DS</h1>")
+
+
+                else:
+                    return("<h1>¡Hiuston tenemos un problema, el valor del botón de venta no es correcto!</h1>")
+
+                #------------------------------EFECTUAR LA VENTA---------------#
+            except:
+                return("<h1>¿Error en el request de btn_venta? Por favor contacte al administrador, esto no debería pasar.</h1>")
+
 
 
 ##############################################################################
