@@ -124,9 +124,7 @@ def ControlVenta():
                         message = "Por favor introduce todos los datos"
                         return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
                     elif state_query == False:
-                        return ("<h1>Vaya, parece que hay un error en state_query y no llenaste todos los campos</h1>")
-                        # Debo de controlar más este error añadiendo mejor un mensaje #¡HECHO!
-                        #return("<h1> ¡Ups! Parece que este error al AÑADIRALCARRITO no lo vio el administrador</h1>")
+                        return ("<h1>Vaya, parece que hay un error en state_query y/o no llenaste todos los campos</h1>")
             else:
                 return("<h1>¡Hiuston tenemos un problema, el valor del botón carrito no es correcto!</h1>")
 
@@ -136,12 +134,6 @@ def ControlVenta():
                 do_sale = str(do_sale)
                 if do_sale == "doSale":
                     #------------------------------EFECTUAR LA VENTA---------------#
-                    #efectuamos la venta
-                    #Que basicamente va a ser un select * a la tabla de carrito
-                    #Y tenedre que guardar todo en diferentes arreglos para
-                    #hacer un insert en la tabala de VENTAS
-                    #Aqui no paso valores, sino que espero valores del select y los paso
-                    #a las de venta
                     aux_id, aux_quantity, Ids, names, quantities, unities, totalPrice, state_query = functions.pre_sale() # Seleccionamos las cosas del carrito
                     if state_query == True and Ids != 0 and names != 0 and quantities != 0 and unities != 0 and totalPrice != 0:
                         state_inv = functions.update_inventario(aux_id, aux_quantity)
