@@ -464,37 +464,62 @@ def pre_sale():
 """
 FUNCION: PARA ACTUALIZAR LOS DATOS EN INVENTARIO BASANDOME EN LOS VENDIDOS
 """
+def aux_update(ID):
+    try:
+        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        cursor = cnx.cursor()
+        try:
+            query = ("SELECT Cantidad_Producto FROM Inventario WHERE ID_Producto = %s;")
+            cursor.execute(query,(ID,))
+            value = 0
+            for valor in cursor:
+                value = float(valor[0])
+                return(value)
+                print("ESte es mi valor en aux", value)
+
+            cnx.commit()
+            cnx.close()
+            return(Value)
+        except:
+
+            cnx.commit()
+            cnx.close()
+            return (False)
+
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return (False)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return (False)
+        else:
+            return (False)
+
+        return (False)
+
 def update_inventario(aux_id, aux_quantity):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        cursor2 = cnx.cursor()
         try:
             contador = 0
             for id in range(len(aux_id)):
-                acualID = aux_id[id]
+                actualID = int(aux_id[id]) # Este es mi ID
                 #data = (acualID)
-                print("my id: ",acualID)
-                query = ("SELECT Cantidad_Producto FROM Inventario WHERE ID_Producto = %s;")
-                print("dsadds")
-                cursor.execute(query,(actualID,))
-                # DEBO DE REVISAR QUE ONDA AQUÍ PORQUE ESTA MADRE NO ACTUALIZA
-                # Ni si quiera ejecuta el siguiente print
-                print("PASE")
+                contador = id
+                #print("mi contador:", contador)
+                #print("my id: ",actualID)
+                rest_value = aux_quantity[contador]
+                #print("My rest_value:", rest_value)
+                value = aux_update(actualID)
+                if value != False:
+                    #print("Mi vallllor", value)
+                    data_query = (value, rest_value, actualID)
+                    query = ("UPDATE Inventario SET Cantidad_Producto = %s-%s WHERE ID_Producto = %s;")
+                    #print("dsadds")
+                    cursor.execute(query, data_query)
 
-                value = 0
-                for val in cursor:
-                    print(val)
-                    value = val[0]
-                    print("value_:",value)
-
-
-                data_query = (value, aux_quantity[contador], actualID)
-                query2 = ("UPDATE Inventario SET Cantidad_Producto = %s-%s WHERE ID_Producto = %s;")
-                cursor2.execute(query2, data_query)
-
-                contador += 1
-
+                else:
+                    return(False)
 
             cnx.commit()
             cnx.close()

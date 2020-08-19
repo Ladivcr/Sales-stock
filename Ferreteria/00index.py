@@ -135,6 +135,7 @@ def ControlVenta():
                 do_sale = request.form['btn_venta']
                 do_sale = str(do_sale)
                 if do_sale == "doSale":
+                    #------------------------------EFECTUAR LA VENTA---------------#
                     #efectuamos la venta
                     #Que basicamente va a ser un select * a la tabla de carrito
                     #Y tenedre que guardar todo en diferentes arreglos para
@@ -144,7 +145,8 @@ def ControlVenta():
                     aux_id, aux_quantity, Ids, names, quantities, unities, totalPrice, state_query = functions.pre_sale() # Seleccionamos las cosas del carrito
                     if state_query == True and Ids != 0 and names != 0 and quantities != 0 and unities != 0 and totalPrice != 0:
                         state_inv = functions.update_inventario(aux_id, aux_quantity)
-                        print(state_inv) #DEBO DE REVISAR LA FUNCIÓN DE ACTUALIZACIÓN
+                        print("Estado de la actualización", state_inv) #DEBO DE REVISAR LA FUNCIÓN DE ACTUALIZACIÓN
+
                         sms, state_query = functions.do_sale(Ids, names, quantities, unities, totalPrice)
                         if state_query == True and state_inv == True:
                             state_car = functions.reset_car()
@@ -155,14 +157,15 @@ def ControlVenta():
                                 if state_q == True:
                                     return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
                                 elif state_q == False:
-                                    return ("<h1>Vaya, parece que hay un error en state_q de total_sale que no deberia ocurrir</h1>")
+                                    return ("<h1>Vaya, parece que hay un error en state_q de total_sale que no deberia ocurrir. Contacte al administrador</h1>")
                             elif state_car == False:
-                                return("<h1>Parece que no fue posible reiniciar el carrito de compras al efectuar la venta</h1>")
+                                return("<h1>Parece que no fue posible reiniciar el carrito de compras al efectuar la venta, contacte al administrador</h1>")
 
                         elif state_query == False or state_inv == False:
                             total, state_q = functions.total_sale()
                             if state_q == True:
                                 print("No se actualizo el producto")
+                                message = "No se actualizo el producto"
                                 return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
                             elif state_q == False:
                                 return ("<h1>Vaya, parece que hay un error en state_q de total_sale que no deberia ocurrir</h1>")
@@ -180,7 +183,7 @@ def ControlVenta():
                 else:
                     return("<h1>¡Hiuston tenemos un problema, el valor del botón de venta no es correcto!</h1>")
 
-                #------------------------------EFECTUAR LA VENTA---------------#
+
             except:
                 return("<h1>¿Error en el request de btn_venta? Por favor contacte al administrador, esto no debería pasar.</h1>")
 
