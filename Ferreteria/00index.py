@@ -27,14 +27,20 @@ def index():
     import functions
     # Función para desplegar la lista de inventario
     mydata, state = functions.desplegar_lista_index()
+    import datetime
+    #2020-07-15
+    now = datetime.datetime.now()
+    fecha = now.strftime("%Y-%m-%d")
+    ganancia_del_dia = functions.ganancias(fecha)
+    print("MIS GANANCIAS",ganancia_del_dia)
     #print("mydata en Inventario", mydata)
     if state == True:
-        return (render_template("index.html", productos = mydata))
+        return (render_template("index.html", productos = mydata, ganancias = ganancia_del_dia))
     if state == False:
         #print(mydata)
         mydata = str(mydata)
         message = ("{0}".format(mydata))
-        return (render_template("index.html", error = message, productos = []))
+        return (render_template("index.html", error = message, productos = [], ganancias = ganancia_del_dia))
     else:
         return ("<h1>¡Ups! Parece que este error en INVENTARIO no lo habíamos contemplado. Por favor contacte al administrador</h1>")
     return (render_template("index.html"))
