@@ -135,7 +135,8 @@ def ControlVenta():
                 if do_sale == "doSale":
                     #------------------------------EFECTUAR LA VENTA---------------#
                     aux_id, aux_quantity, Ids, names, quantities, unities, totalPrice, state_query = functions.pre_sale() # Seleccionamos las cosas del carrito
-                    if state_query == True and Ids != 0 and names != 0 and quantities != 0 and unities != 0 and totalPrice != 0:
+                    #print("IDS", Ids,"NAMES", names,"cantidades", quantities)
+                    if state_query == True and Ids != 0 and names != 0 and quantities != 0 and unities != 0 and totalPrice != 0 and Ids != "" and names != "" and quantities != "" and unities != "" and totalPrice != "":
                         state_inv = functions.update_inventario(aux_id, aux_quantity)
                         print("Estado de la actualización", state_inv) #DEBO DE REVISAR LA FUNCIÓN DE ACTUALIZACIÓN
 
