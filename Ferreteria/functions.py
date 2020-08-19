@@ -34,12 +34,12 @@ nameDB = credentials["credentials"][0]["database"]
 """
 Función: DESPLEGAR LOS PRODUCTOS DEL INVENTARIO
 """
-def desplegar_lista_index():
+def desplegar_lista_index(fecha):
     try:
         cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
         cursor = cnx.cursor()
-        query = ('SELECT * FROM Ventas;')
-        cursor.execute(query)
+        query = ('SELECT * FROM Ventas WHERE Fecha = %s;')
+        cursor.execute(query,(fecha,))
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             return ("Something is wrong with your user name or passwordDLI", False)
@@ -58,6 +58,42 @@ def desplegar_lista_index():
     cnx.commit()
     cnx.close()
     return (mydata, True)
+
+###############################################################################
+
+"""
+FUNCION: PARA OBTENER LAS GANANCIAS DEL DÍA
+"""
+def ganancias(fecha):
+    try:
+        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
+        cursor = cnx.cursor()
+        try:
+            query = ("SELECT SUM(Total) FROM Ventas WHERE Fecha = %s;")
+            cursor.execute(query,(fecha,))
+            value = 0
+            for valor in cursor:
+                value = float(valor[0])
+                return(value)
+                #print("ESte es mi valor en aux", value)
+
+            cnx.commit()
+            cnx.close()
+            return(Value)
+        except:
+            cnx.commit()
+            cnx.close()
+            return (0)
+
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            return (-11)
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            return (-22)
+        else:
+            return (-33)
+
+        return (-44)
 
 ###############################################################################
 
@@ -614,36 +650,3 @@ def reset_car():
     return (True)
 
 ###############################################################################
-"""
-FUNCION: PARA OBTENER LAS GANANCIAS DEL DÍA
-"""
-def ganancias(fecha):
-    try:
-        cnx = mysql.connector.connect(user=userDB, password=passwordDB, host=hostDB, database=nameDB)
-        cursor = cnx.cursor()
-        try:
-            query = ("SELECT SUM(Total) FROM Ventas WHERE Fecha = %s;")
-            cursor.execute(query,(fecha,))
-            value = 0
-            for valor in cursor:
-                value = float(valor[0])
-                return(value)
-                #print("ESte es mi valor en aux", value)
-
-            cnx.commit()
-            cnx.close()
-            return(Value)
-        except:
-            cnx.commit()
-            cnx.close()
-            return (0)
-
-    except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            return (-11)
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            return (-22)
-        else:
-            return (-33)
-
-        return (-44)
