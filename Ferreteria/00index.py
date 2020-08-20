@@ -173,8 +173,12 @@ def ControlVenta():
                         total, state_query = functions.total_sale()
                         #print("mi ttoal es mi estado:{0}{1}".format(total, state_query))
                         if state_query == True:
-                            message = "No hay datos para efectuar la venta o tal vez algo fallo en pre_sale"
+                            message = "No hay datos para efectuar la venta, en caso de que si había entonces algo fallo en pre_sale. Contacta al administrador de ser así"
                             return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                        elif state_query == False:
+                            message = "Algo fallo en total_sale, por favor contacta al administrador"
+                            return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+
                         else:
                             return("<h1> Parece que este error se le paso al administrador DS</h1>")
 
@@ -184,7 +188,25 @@ def ControlVenta():
 
 
             except:
-                return("<h1>¿Error en el request de btn_venta? Por favor contacte al administrador, esto no debería pasar.</h1>")
+                try:
+                    cancel = request.form['btn_cancelar']
+                    cancel = str(cancel)
+                    if cancel == "Cancelar":
+                        state_c = functions.reset_car()
+                        total, state_q = functions.total_sale()
+                        if state_c == True and state_q == True:
+                            message = "Venta cancelada correctamente"
+                            return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                        elif state_c == False and state_q == True:
+                            message = "No fue posible cancelar la venta, algo fallo en reset_car"
+                            return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                        elif state_c == True and state_q == False:
+                            message = "La venta fue cancelada pero algo fallo en total_sale"
+                            return (render_template("RealizarVenta.html", error = message, longitud = 0, precioTotal = total))
+                    else:
+                        return("<h1>Algo fallo en la petición de btn_cancelar, contacta al administrador</h1>")
+                except:
+                    return("<h1>¿Error en el request de btn_cancelar? Por favor contacte al administrador, esto no debería pasar.</h1>")
 
 
 

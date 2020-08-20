@@ -46,7 +46,7 @@
   <li>
     <label for="code">Código del producto:</label>
     <input type="text" id="code" name="product_code" placeholder="{{ code }}" required>
-    <center><button class="btn_search" name="adding" type="submit" value="AddCode">Añadir atributos mediante su código</button></center>
+    <center><button class="btn_search" name="adding" type="submit" value="AddCode" title="Para facilitarte el trabajo, te ayudo mostrandote que parámetros debes de introducir">Añadir atributos mediante su código</button></center>
   </li>
 
   <li>
@@ -78,9 +78,12 @@
   </li>
  </ul>
  <br>
-  <center><button class="btn_carrito" name="btn_carrito" value = "addCar" type="submit">Añadir al carrito</button></center>
+  <center><button class="btn_carrito" name="btn_carrito" value = "addCar" type="submit" title="Antes de vender los productos debes de añadirlos al carrito de compras">Añadir al carrito</button></center>
   <p>¿Ya añadiste todos los productos al carrito? Presiona <b>"efectuar venta".</b></p>
-  <center><button class="btn_venta" name="btn_venta" value = "doSale" type="submit"><b>Efectuar venta</b></button></center>
+  <center><button class="btn_venta" name="btn_venta" value = "doSale" type="submit" title="¿Terminaste de añadir los productos al carrito? !Hora de hacer la venta¡"><b>Efectuar venta</b></button></center>
+  <br>
+  <center><button class="btn_cancelar" name="btn_cancelar" value = "Cancelar" type="submit" title="¡Cuidado! Estas entrando en una zona peligrosa"><b>Cancelar venta</b></button></center>
+
 </form>
 <br>
 <center><p>*<b>Añadir atributos mediante su código:</b> tiene como objetivo facilitar el llenado de los atributos:
