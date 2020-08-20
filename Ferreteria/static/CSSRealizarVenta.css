@@ -7,17 +7,6 @@
 }
 
 
-.btn_venta {
-    padding: 10px 20px;
-    background-color: #01DF01;
-    color: black;
-}
-
-.btn_cancelar {
-    padding: 10px 20px;
-    background-color: red;
-    color: white;
-}
 
 /*
 .menuINVENTARIO li {
@@ -139,14 +128,20 @@ button {
 
 
 .btn_carrito {
-  padding: 10px 20px;
+  padding: 15px 30px;
   background-color: #D7DF01;
   color: black;
 }
 
 .btn_venta {
-  margin-top: 10px;
-  padding: 5px 20px;
+  margin-top: 5px;
+  padding: 15px 30px;
   color: black;
   background-color: #01DF01;
+}
+
+.btn_cancelar {
+    padding: 4px 15px;
+    background-color: red;
+    color: white;
 }
