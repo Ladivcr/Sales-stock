@@ -38,15 +38,15 @@
   </li>
   <li>
     <label for="name">Nombre:</label>
-    <input type="text" id="name" name="product_name" placeholder="{{ name }}">
+    <input type="text" id="name" name="product_name" placeholder="{{ name }}" title="Parámetro obligatorio">
   </li>
   <li>
     <label for="specifications">Especificaciones:</label>
-    <input type="text" id="specifications" name="product_specifications" placeholder="{{ specifications }}">
+    <input type="text" id="specifications" name="product_specifications" placeholder="{{ specifications }}" title="NO obligatorio">
   </li>
   <li>
     <label for="quantity">Cantidad:</label>
-    <input type="number" id="quantity" name="product_quantity" step="any" placeholder="{{ quantity }}">
+    <input type="number" id="quantity" name="product_quantity" step="any" placeholder="{{ quantity }}" title="Parámetro obligatorio">
   </li>
   <li>
     <label for="unity">Unidad: {{ unity }}</label>
@@ -61,7 +61,7 @@
 
   <li>
     <label for="price">Precio c/u:</label>
-    <input type="number" id="price" name="product_price" step="any" placeholder="{{ price }}">
+    <input type="number" id="price" name="product_price" step="any" placeholder="{{ price }}" title="Parámetro obligatorio">
   </li>
  </ul>
  <br>
