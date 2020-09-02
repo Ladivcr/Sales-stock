@@ -509,7 +509,7 @@ def aux_update(ID):
             cursor.execute(query,(ID,))
             value = 0
             for valor in cursor:
-                value = float(valor[0])
+                value = str(valor[0])
                 return(value)
                 print("ESte es mi valor en aux", value)
 
@@ -539,7 +539,7 @@ def update_inventario(aux_id, aux_quantity):
         try:
             contador = 0
             for id in range(len(aux_id)):
-                actualID = int(aux_id[id]) # Este es mi ID
+                actualID = str(aux_id[id]) # Este es mi ID
                 #data = (acualID)
                 contador = id
                 #print("mi contador:", contador)

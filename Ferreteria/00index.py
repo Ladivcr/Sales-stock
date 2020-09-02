@@ -32,8 +32,8 @@ def index():
     # Función para desplegar la lista de inventario
     mydata, state = functions.desplegar_lista_index(fecha)
     ganancia_del_dia = functions.ganancias(fecha)
-    print("MIS GANANCIAS",ganancia_del_dia)
-    print("mydata hoy en Ventas", mydata)
+    print("MIS GANANCIAS:",ganancia_del_dia)
+    #print("mydata hoy en Ventas", mydata)
     if state == True:
         return (render_template("index.html", productos = mydata, ganancias = ganancia_del_dia))
     elif state == False:
