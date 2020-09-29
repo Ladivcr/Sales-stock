@@ -1,0 +1,6 @@
+#Folloe the next steps
+
+https://sourceforge.net/projects/xampp/
+https://www.youtube.com/watch?v=HMDSPX1qN-M
+
+Configurar xampp para aplicación
